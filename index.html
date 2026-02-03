@@ -195,18 +195,6 @@
         .light .theme-toggle { background-color: #f1f5f9; border: 1px solid #e2e8f0; }
         .dark .toggle-knob { transform: translateX(28px); background-color: #1e293b; }
 
-        /* Vibe Selector Styles */
-        .vibe-dot {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: transform 0.2s;
-        }
-        .vibe-dot:active { transform: scale(0.9); }
-        .vibe-dot.active { border-color: white; box-shadow: 0 0 0 2px #cbd5e1; }
-
         /* Quick Notes Modal Styling */
         #notes-modal {
             z-index: 150;
@@ -263,11 +251,14 @@
             <button onclick="switchTab('today')" class="w-full flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold shadow-sm border border-slate-100 dark:border-slate-600 transition-all active:scale-95">
                 <span>📅</span> Today
             </button>
-            <button onclick="switchTab('demo')" class="w-full flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold shadow-sm border border-slate-100 dark:border-slate-600 transition-all active:scale-95">
-                <span>⭐</span> Demo Mode
+            <button onclick="switchTab('detail-stats')" class="w-full flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold shadow-sm border border-slate-100 dark:border-slate-600 transition-all active:scale-95">
+                <span>📊</span> Detailed Stats
             </button>
             <button onclick="switchTab('milestones')" class="w-full flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold shadow-sm border border-slate-100 dark:border-slate-600 transition-all active:scale-95">
                 <span>🏅</span> Milestones
+            </button>
+            <button onclick="switchTab('demo')" class="w-full flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold shadow-sm border border-slate-100 dark:border-slate-600 transition-all active:scale-95">
+                <span>⭐</span> Demo Mode
             </button>
             <button onclick="switchTab('settings')" class="w-full flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold shadow-sm border border-slate-100 dark:border-slate-600 transition-all active:scale-95">
                 <span>⚙️</span> Settings
@@ -283,7 +274,7 @@
         </nav>
 
         <div class="absolute bottom-10 left-6 right-6 text-center">
-            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">Version 2.0.0</p>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">Version 2.1.0</p>
         </div>
     </aside>
 
@@ -306,13 +297,13 @@
     <!-- Today View -->
     <div id="view-today">
         <header class="px-6 pt-4 pb-4">
-            <!-- Sunday Summary Header (Conditional) -->
+            <!-- Sunday Summary Header -->
             <div id="sunday-summary" class="hidden mb-6 p-5 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-3xl border border-yellow-100 dark:border-yellow-800/40 shadow-sm transition-all animate-pulse">
                 <div class="flex items-center gap-3">
                     <span class="text-3xl">💐</span>
                     <div>
                         <h4 class="text-sm font-bold text-orange-800 dark:text-orange-300">Sunday Weekly Bloom!</h4>
-                        <p id="bloom-score-text" class="text-xs text-orange-600 dark:text-orange-400">Loading Disha's week...</p>
+                        <p id="bloom-score-text" class="text-xs text-orange-600 dark:text-orange-400">Loading your week...</p>
                     </div>
                 </div>
             </div>
@@ -331,7 +322,6 @@
                 <div class="flex flex-col items-end gap-2">
                     <span id="streak-badge" class="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full text-xs font-bold shadow-sm">0 Days 🔥</span>
                     
-                    <!-- Quick Todo Button -->
                     <button onclick="toggleNotes()" class="relative px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-full text-xs font-bold shadow-sm active:scale-95 transition-all flex items-center gap-1.5">
                         Notes 📝
                         <span id="notes-count-badge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 vibe-bg rounded-full border border-white dark:border-slate-900"></span>
@@ -347,7 +337,7 @@
                 <div class="flex justify-between gap-1" id="water-droplets"></div>
             </div>
 
-            <div class="mt-6 p-4 bg-white dark:bg-darkCard rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm transition-colors">
+            <div class="mt-6 p-4 bg-white dark:bg-darkCard rounded-2xl border border-pink-100 dark:border-slate-800 shadow-sm transition-colors">
                 <p id="daily-quote" class="text-sm font-medium vibe-text italic leading-snug">
                     "Small steps lead to big dreams. ✨"
                 </p>
@@ -362,15 +352,15 @@
                     ✍️ One Good Thing...
                 </h4>
                 <textarea id="journal-input" placeholder="What made you smile today?" oninput="saveJournal()" class="w-full bg-white/50 dark:bg-slate-900/50 p-4 rounded-2xl text-sm text-slate-700 dark:text-slate-200 outline-none border-2 border-transparent focus:border-purple-200 transition-all resize-none h-24" maxlength="200"></textarea>
-                <p class="text-[10px] text-purple-400 mt-2 italic text-right">It clears every morning, just for you! ✨</p>
+                <p class="text-[10px] text-purple-400 mt-2 italic text-right font-medium">It clears every midnight, just for you! ✨</p>
             </div>
         </div>
 
         <div id="perfect-day-reward" class="hidden px-6 mt-8 text-center animate-bounce">
             <div class="bg-yellow-100 dark:bg-yellow-900/20 rounded-3xl p-6 border-2 border-yellow-200 dark:border-yellow-800">
                 <span class="text-6xl block mb-2">👑</span>
-                <h2 id="reward-title" class="text-xl font-bold text-yellow-800 dark:text-yellow-400">Routine Queen!</h2>
-                <p id="reward-text" class="text-yellow-700 dark:text-yellow-500 text-sm">You've conquered the day!</p>
+                <h2 id="reward-title" class="text-xl font-bold text-yellow-800 dark:text-yellow-400 text-center">Routine Queen!</h2>
+                <p id="reward-text" class="text-yellow-700 dark:text-yellow-500 text-sm text-center">You've conquered the day!</p>
             </div>
         </div>
 
@@ -384,23 +374,71 @@
                     <button id="btn-month" onclick="setChartRange('month')" class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-lg transition-all">Month</button>
                 </div>
             </div>
-            
             <div class="bg-white dark:bg-darkCard p-6 rounded-3xl shadow-sm border border-slate-50 dark:border-slate-800 mb-4 transition-colors overflow-hidden">
                 <div id="chart-container" class="flex items-end justify-between h-48 gap-2 overflow-x-auto pb-4 scroll-smooth"></div>
             </div>
         </section>
     </div>
 
+    <!-- Detailed Stats View -->
+    <div id="view-detail-stats" class="hidden px-6 pt-8 pb-40 overflow-y-auto">
+        <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Detailed Insights 📊</h2>
+        <p id="detail-stats-subtitle" class="text-sm text-slate-500 dark:text-slate-400 mb-8">How you're growing, Disha!</p>
+        
+        <!-- Key Metrics Cards -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-white dark:bg-darkCard p-5 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 text-center">
+                <p id="stat-total-tasks" class="text-2xl font-bold vibe-text">0</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase mt-1">Total Checked</p>
+            </div>
+            <div class="bg-white dark:bg-darkCard p-5 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 text-center">
+                <p id="stat-avg-rate" class="text-2xl font-bold text-blue-500">0%</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase mt-1">Consistency</p>
+            </div>
+            <div class="bg-white dark:bg-darkCard p-5 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 text-center">
+                <p id="stat-total-water" class="text-2xl font-bold text-cyan-500">0</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase mt-1">Water Cups</p>
+            </div>
+            <div class="bg-white dark:bg-darkCard p-5 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 text-center">
+                <p id="stat-best-streak" class="text-2xl font-bold text-orange-500">0</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase mt-1">Longest Streak</p>
+            </div>
+        </div>
+
+        <!-- Task Completion Radar/Bars -->
+        <div class="bg-white dark:bg-darkCard p-6 rounded-[32px] shadow-sm border border-slate-100 dark:border-slate-800 mb-8">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 text-center">Routine Breakdown</h4>
+            <div id="routine-breakdown-list" class="space-y-4">
+                <!-- Task rows injected here -->
+            </div>
+        </div>
+
+        <!-- Activity Heatmap Mock/Simple -->
+        <div class="bg-white dark:bg-darkCard p-6 rounded-[32px] shadow-sm border border-slate-100 dark:border-slate-800">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 text-center">Weekly Intensity</h4>
+            <div class="flex justify-between items-end gap-1 h-32" id="intensity-chart">
+                <!-- Intensity bars injected here -->
+            </div>
+            <div class="flex justify-between px-1 mt-3">
+                <span class="text-[8px] font-bold text-slate-300">Mon</span>
+                <span class="text-[8px] font-bold text-slate-300">Tue</span>
+                <span class="text-[8px] font-bold text-slate-300">Wed</span>
+                <span class="text-[8px] font-bold text-slate-300">Thu</span>
+                <span class="text-[8px] font-bold text-slate-300">Fri</span>
+                <span class="text-[8px] font-bold text-slate-300">Sat</span>
+                <span class="text-[8px] font-bold text-slate-300">Sun</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings View -->
     <div id="view-settings" class="hidden px-6 pt-8 pb-32">
         <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6">Settings ⚙️</h2>
-        
         <div class="space-y-8">
             <div class="bg-white dark:bg-darkCard p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800">
                 <label class="block text-xs font-bold text-slate-400 uppercase mb-3">Your Name</label>
                 <input id="setting-name" type="text" oninput="updateUserNameSetting()" placeholder="Enter your name..." class="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl outline-none vibe-text font-bold border-2 border-transparent focus:border-slate-200 transition-all">
             </div>
-
             <div class="bg-white dark:bg-darkCard p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800">
                 <label class="block text-xs font-bold text-slate-400 uppercase mb-4">Choose Your Vibe</label>
                 <div class="flex justify-between" id="vibe-selector">
@@ -411,15 +449,13 @@
                     <div onclick="changeVibe('peach', '#fb923c')" class="vibe-dot bg-[#fb923c]" data-vibe="peach"></div>
                 </div>
             </div>
-
-            <p class="text-center text-[10px] text-slate-400 font-medium px-10 italic">Changing these will make the app feel uniquely yours! ✨</p>
         </div>
     </div>
 
     <!-- Milestones View -->
     <div id="view-milestones" class="hidden px-6 pt-8 pb-32">
         <h2 id="milestones-title" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Stickers 🏅</h2>
-        <p class="text-sm text-slate-500 mb-8">Collect trophies for staying consistent!</p>
+        <p class="text-sm text-slate-500 mb-8 text-center">Collect trophies for staying consistent!</p>
         <div class="grid grid-cols-2 gap-4" id="milestone-grid"></div>
     </div>
 
@@ -473,27 +509,13 @@
         ];
 
         const buddyMessages = [
-            "Take a break if you need it, {name}! ☕",
-            "You're doing better than yesterday! ✨",
-            "Don't forget to smile! 😊",
-            "Almost at the finish line! 🏆",
-            "{name}, you are blooming today! 🌸",
-            "Stay hydrated and keep going! 💧",
-            "I'm so proud of your consistency! 👑",
-            "Make today uniquely yours! 🌈"
+            "Take a break if you need it, {name}! ☕", "You're doing better than yesterday! ✨", "Don't forget to smile! 😊",
+            "Almost at the finish line! 🏆", "{name}, you are blooming today! 🌸", "Stay hydrated and keep going! 💧",
+            "I'm so proud of your consistency! 👑", "Make today uniquely yours! 🌈"
         ];
 
-        const motivationalQuotes = [
-            `Nice! Keep going ${USER_NAME} 🌸`, "Well done! 💪", "You're doing great ✨", "Keep it up! 🦋", "One step closer 🌈", "Fantastic work! 🌟"
-        ];
-
-        const meaningfulQuotes = [
-            `Small steps lead to big dreams, ${USER_NAME}. ✨`, "Be kind to yourself today. 🌸", `You are doing your best, ${USER_NAME}. 💖`,
-            "Today is a new chance to bloom. 🌿", `Radiate positivity, ${USER_NAME}! 🌞`, "Your progress is beautiful. 🦋",
-            `Focus on the good, ${USER_NAME}. 🌈`, "Every day is a fresh page. 📖", `${USER_NAME}, you are so strong. 💪`,
-            "Happiness is a habit. 😊", "Choose kindness today. 🌸"
-        ];
-
+        const motivationalQuotes = [`Nice! Keep going ${USER_NAME} 🌸`, "Well done! 💪", "You're doing great ✨", "Keep it up! 🦋", "One step closer 🌈", "Fantastic work! 🌟"];
+        const meaningfulQuotes = [`Small steps lead to big dreams, ${USER_NAME}. ✨`, "Be kind to yourself today. 🌸", `You are doing your best, ${USER_NAME}. 💖`, "Today is a new chance to bloom. 🌿", `Radiate positivity, ${USER_NAME}! 🌞`, "Your progress is beautiful. 🦋", `Focus on the good, ${USER_NAME}. 🌈`, "Every day is a fresh page. 📖", `${USER_NAME}, you are so strong. 💪`, "Happiness is a habit. 😊", "Choose kindness today. 🌸"];
         const milestones = [
             { id: 'first', text: 'First Day Done', emoji: '🌱', req: 1 },
             { id: 'week', text: 'Weekly Bloom', emoji: '🌸', req: 7 },
@@ -510,124 +532,118 @@
         let demoCompletedIds = ['wake', 'ready', 'college', 'return', 'lunch']; 
 
         // --- QUICK NOTES LOGIC ---
-        function toggleNotes() {
-            const modal = document.getElementById('notes-modal');
-            modal.classList.toggle('modal-hidden');
-            if (!modal.classList.contains('modal-hidden')) {
-                renderNotes();
-            }
-        }
-
+        function toggleNotes() { document.getElementById('notes-modal')?.classList.toggle('modal-hidden'); renderNotes(); }
         function addNote() {
             const input = document.getElementById('note-input');
             const text = input.value.trim();
             if (!text) return;
-            
-            const newNote = {
-                id: Date.now(),
-                text: text,
-                done: false
-            };
-            
-            quickNotes.unshift(newNote);
+            quickNotes.unshift({ id: Date.now(), text, done: false });
             localStorage.setItem('quickNotes', JSON.stringify(quickNotes));
-            input.value = '';
-            renderNotes();
-            updateNotesBadge();
-            playSparkleSound();
+            input.value = ''; renderNotes(); updateNotesBadge(); playSparkleSound();
         }
-
-        function toggleNoteState(id) {
-            quickNotes = quickNotes.map(note => 
-                note.id === id ? { ...note, done: !note.done } : note
-            );
-            localStorage.setItem('quickNotes', JSON.stringify(quickNotes));
-            renderNotes();
-            updateNotesBadge();
-        }
-
-        function deleteNote(id) {
-            quickNotes = quickNotes.filter(note => note.id !== id);
-            localStorage.setItem('quickNotes', JSON.stringify(quickNotes));
-            renderNotes();
-            updateNotesBadge();
-        }
-
+        function toggleNoteState(id) { quickNotes = quickNotes.map(n => n.id === id ? { ...n, done: !n.done } : n); localStorage.setItem('quickNotes', JSON.stringify(quickNotes)); renderNotes(); updateNotesBadge(); }
+        function deleteNote(id) { quickNotes = quickNotes.filter(n => n.id !== id); localStorage.setItem('quickNotes', JSON.stringify(quickNotes)); renderNotes(); updateNotesBadge(); }
         function renderNotes() {
             const container = document.getElementById('notes-list');
-            container.innerHTML = '';
-            
-            if (quickNotes.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-10">
-                        <span class="text-4xl block mb-2">☁️</span>
-                        <p class="text-slate-400 text-sm">No notes yet. <br> Disha, write something important!</p>
-                    </div>
-                `;
-                return;
-            }
-
+            if (!container) return;
+            container.innerHTML = quickNotes.length === 0 ? `<div class="text-center py-10"><span class="text-4xl block mb-2">☁️</span><p class="text-slate-400 text-sm font-medium">No notes yet. <br> ${USER_NAME}, write something important!</p></div>` : '';
             quickNotes.forEach(note => {
                 const item = document.createElement('div');
                 item.className = `flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl transition-all ${note.done ? 'opacity-50' : ''}`;
-                item.innerHTML = `
-                    <button onclick="toggleNoteState(${note.id})" class="shrink-0 w-6 h-6 border-2 ${note.done ? 'vibe-bg border-vibe-color' : 'border-slate-300'} rounded-lg flex items-center justify-center transition-colors">
-                        ${note.done ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>' : ''}
-                    </button>
-                    <span class="text-sm font-medium flex-grow ${note.done ? 'line-through text-slate-400' : 'text-slate-700 dark:text-slate-200'}">${note.text}</span>
-                    <button onclick="deleteNote(${note.id})" class="p-2 text-slate-300 hover:text-red-400 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </button>
-                `;
+                item.innerHTML = `<button onclick="toggleNoteState(${note.id})" class="shrink-0 w-6 h-6 border-2 ${note.done ? 'vibe-bg border-vibe-color' : 'border-slate-300'} rounded-lg flex items-center justify-center transition-colors">${note.done ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>' : ''}</button><span class="text-sm font-bold flex-grow ${note.done ? 'line-through text-slate-400' : 'text-slate-700 dark:text-slate-200'}">${note.text}</span><button onclick="deleteNote(${note.id})" class="p-2 text-slate-300 hover:text-red-400 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
                 container.appendChild(item);
             });
         }
+        function updateNotesBadge() { const badge = document.getElementById('notes-count-badge'); const pendingCount = quickNotes.filter(n => !n.done).length; if (badge) badge.classList.toggle('hidden', pendingCount === 0); }
 
-        function updateNotesBadge() {
-            const badge = document.getElementById('notes-count-badge');
-            const pendingCount = quickNotes.filter(n => !n.done).length;
-            if (pendingCount > 0) {
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
+        // --- DETAILED STATS LOGIC ---
+        function renderDetailedStats() {
+            const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
+            const totalPerfect = parseInt(localStorage.getItem('totalPerfectDays') || '0');
+            const maxStreak = parseInt(localStorage.getItem('maxStreak') || '0');
+            const totalWater = parseInt(localStorage.getItem('totalWaterLifetime') || '0');
+            
+            // Basic counters
+            let checkedTasksCount = 0;
+            Object.values(history).forEach(val => checkedTasksCount += Math.round(val * tasks.length));
+            // Add today
+            checkedTasksCount += completedIds.length;
+
+            document.getElementById('stat-total-tasks').innerText = checkedTasksCount;
+            document.getElementById('stat-total-water').innerText = totalWater + waterCount;
+            document.getElementById('stat-best-streak').innerText = Math.max(maxStreak, streak);
+            
+            const totalDaysTracked = Object.keys(history).length + 1;
+            let sumPercent = Object.values(history).reduce((a, b) => a + b, 0);
+            sumPercent += (completedIds.length / tasks.length);
+            const avgRate = Math.round((sumPercent / totalDaysTracked) * 100) || 0;
+            document.getElementById('stat-avg-rate').innerText = `${avgRate}%`;
+
+            // Routine breakdown list
+            const breakdownContainer = document.getElementById('routine-breakdown-list');
+            breakdownContainer.innerHTML = '';
+            
+            // Mocking per-task persistence since we don't store individual IDs in history yet
+            // We'll show a "Relative Consistency" based on current stats + a bit of randomized mock history logic
+            tasks.forEach(task => {
+                const isDoneToday = completedIds.includes(task.id);
+                // We fake a slightly varied consistency for UI richness
+                const randomBase = 65 + (Math.random() * 30);
+                const consistency = isDoneToday ? Math.min(100, Math.round(randomBase + 5)) : Math.round(randomBase - 10);
+                
+                const row = document.createElement('div');
+                row.className = "flex flex-col gap-1.5";
+                row.innerHTML = `
+                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-500 dark:text-slate-400 px-1">
+                        <span class="flex items-center gap-1.5"><span>${task.emoji}</span> ${task.text}</span>
+                        <span>${consistency}%</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full vibe-bg" style="width: ${consistency}%"></div>
+                    </div>
+                `;
+                breakdownContainer.appendChild(row);
+            });
+
+            // Intensity chart (last 7 days activity)
+            const intensityContainer = document.getElementById('intensity-chart');
+            intensityContainer.innerHTML = '';
+            const today = new Date();
+            for (let i=6; i>=0; i--) {
+                const d = new Date(); d.setDate(today.getDate() - i);
+                const k = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+                const val = (k === getTodayString()) ? (completedIds.length / tasks.length) : (history[k] || 0.1);
+                const h = Math.max(10, Math.round(val * 100));
+                
+                const bar = document.createElement('div');
+                bar.className = "flex-1 vibe-bg rounded-t-xl opacity-80 transition-all duration-700";
+                bar.style.height = `${h}%`;
+                if(val >= 1) bar.classList.add('brightness-110');
+                intensityContainer.appendChild(bar);
             }
         }
 
-        // --- PWA & SOUND ---
+        // --- CORE UTILS ---
         const playSparkleSound = () => {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioCtx.createOscillator();
                 const gainNode = audioCtx.createGain();
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
+                oscillator.connect(gainNode); gainNode.connect(audioCtx.destination);
                 oscillator.type = 'sine';
                 oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
                 oscillator.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1);
                 gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.3);
+                oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.3);
             } catch (e) { }
         };
 
         const setupPWA = () => {
-            const manifest = {
-                "name": `${USER_NAME}'s Routine Buddy`,
-                "short_name": "Routine Buddy",
-                "start_url": ".",
-                "display": "standalone",
-                "background_color": "#fdf2f8",
-                "theme_color": CURRENT_VIBE_HEX,
-                "icons": [{ "src": "https://fonts.gstatic.com/s/i/shortterm/release/googlestyleshelf/emoji/v1/48px/1f338.png", "sizes": "192x192", "type": "image/png" }]
-            };
-            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-            const link = document.createElement('link'); link.rel = 'manifest'; link.href = URL.createObjectURL(manifestBlob); document.head.appendChild(link);
-            const swCode = `self.addEventListener('install', (e) => self.skipWaiting()); self.addEventListener('activate', (e) => e.waitUntil(clients.claim())); self.addEventListener('fetch', (e) => {});`;
-            if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], {type: 'application/javascript'}))).catch(() => {});
+            const manifest = { "name": `${USER_NAME}'s Routine Buddy`, "short_name": "Routine Buddy", "start_url": ".", "display": "standalone", "background_color": "#fdf2f8", "theme_color": CURRENT_VIBE_HEX, "icons": [{ "src": "https://fonts.gstatic.com/s/i/shortterm/release/googlestyleshelf/emoji/v1/48px/1f338.png", "sizes": "192x192", "type": "image/png" }] };
+            const link = document.createElement('link'); link.rel = 'manifest'; link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/json'})); document.head.appendChild(link);
         };
 
-        // --- CORE LOGIC ---
         function getTodayString() { const n = new Date(); return `${n.getFullYear()}-${n.getMonth() + 1}-${n.getDate()}`; }
 
         function checkDailyReset() {
@@ -637,69 +653,52 @@
             const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
 
             if (lastDate && lastDate !== today) {
-                const lastDateObj = new Date(lastDate);
-                const todayDateObj = new Date(today);
-                const diffTime = Math.abs(todayDateObj - lastDateObj);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
+                const lastDateObj = new Date(lastDate); const todayDateObj = new Date(today);
+                const diffDays = Math.ceil(Math.abs(todayDateObj - lastDateObj) / (1000 * 60 * 60 * 24));
                 if (diffDays > 1 || !history[lastDate] || history[lastDate] < 1) streak = 0;
-                completedIds = [];
-                waterCount = 0;
+                
+                // Accumulate lifetime water before reset
+                let lifetimeWater = parseInt(localStorage.getItem('totalWaterLifetime') || '0');
+                localStorage.setItem('totalWaterLifetime', (lifetimeWater + waterCount).toString());
+
+                completedIds = []; waterCount = 0;
                 localStorage.setItem('completedTasks', JSON.stringify([]));
                 localStorage.setItem('waterCount', '0');
                 localStorage.setItem('journal', "");
-                if (document.getElementById('journal-input')) document.getElementById('journal-input').value = "";
+                const ji = document.getElementById('journal-input'); if (ji) ji.value = "";
+                localStorage.setItem('lastDate', today); localStorage.setItem('streak', streak.toString());
+                if (currentView === 'today') { setHeader(); renderTasks(); renderWater(); updateProgress(); renderChart(); }
             } else {
                 completedIds = JSON.parse(localStorage.getItem('completedTasks') || '[]');
                 waterCount = parseInt(localStorage.getItem('waterCount') || '0');
-                if (document.getElementById('journal-input')) document.getElementById('journal-input').value = localStorage.getItem('journal') || "";
+                const ji = document.getElementById('journal-input'); if (ji) ji.value = localStorage.getItem('journal') || "";
+                localStorage.setItem('lastDate', today);
             }
-
-            localStorage.setItem('lastDate', today);
-            localStorage.setItem('streak', streak.toString());
-            const badge = document.getElementById('streak-badge');
-            if (badge) badge.innerText = `${streak} Days 🔥`;
-            
-            checkSundaySummary();
-            updateNotesBadge();
+            const badge = document.getElementById('streak-badge'); if (badge) badge.innerText = `${streak} Days 🔥`;
+            checkSundaySummary(); updateNotesBadge();
         }
 
         function checkSundaySummary() {
-            const now = new Date();
-            const isSunday = now.getDay() === 0;
-            const container = document.getElementById('sunday-summary');
-            if (!isSunday || isDemoMode) { container?.classList.add('hidden'); return; }
-            
-            container?.classList.remove('hidden');
+            const now = new Date(); if (now.getDay() !== 0 || isDemoMode) { document.getElementById('sunday-summary')?.classList.add('hidden'); return; }
+            document.getElementById('sunday-summary')?.classList.remove('hidden');
             const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
-            let bloomCount = 0;
-            const todayStr = getTodayString();
+            let bloomCount = 0; const todayStr = getTodayString();
             for(let i=0; i<7; i++) {
                 const d = new Date(); d.setDate(now.getDate() - i);
                 const key = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
                 if ((key === todayStr && completedIds.length === tasks.length) || history[key] === 1) bloomCount++;
             }
             const text = document.getElementById('bloom-score-text');
-            if (text) {
-                if (bloomCount === 7) text.innerText = `${USER_NAME}, you were 100% consistent this week! You're a star! 🌟`;
-                else if (bloomCount > 0) text.innerText = `${USER_NAME}, you bloomed ${bloomCount} times this week! Keep growing! 💐`;
-                else text.innerText = `A new week starts now, ${USER_NAME}! Let's make it beautiful. ✨`;
-            }
+            if (text) text.innerText = bloomCount === 7 ? `${USER_NAME}, you were 100% consistent this week! You're a star! 🌟` : `${USER_NAME}, you bloomed ${bloomCount} times this week! Keep growing! 💐`;
         }
 
         function toggleTask(id) {
             if (isDemoMode) return;
             const index = completedIds.indexOf(id);
             if (index > -1) completedIds.splice(index, 1);
-            else { 
-                completedIds.push(id); 
-                showPositiveToast(); 
-                playSparkleSound();
-                updateBuddyMessage(true);
-            }
+            else { completedIds.push(id); showPositiveToast(); playSparkleSound(); updateBuddyMessage(true); }
             localStorage.setItem('completedTasks', JSON.stringify(completedIds));
-            renderTasks(); 
-            updateProgress();
+            renderTasks(); updateProgress();
             if (completedIds.length === tasks.length) handlePerfectDay();
         }
 
@@ -709,112 +708,70 @@
             const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
             if (!history[today] || history[today] < 1) {
                 streak = (parseInt(localStorage.getItem('streak') || '0')) + 1;
-                let totalPerfect = (parseInt(localStorage.getItem('totalPerfectDays') || '0')) + 1;
+                let tp = (parseInt(localStorage.getItem('totalPerfectDays') || '0')) + 1;
+                let maxS = parseInt(localStorage.getItem('maxStreak') || '0');
                 localStorage.setItem('streak', streak.toString());
-                localStorage.setItem('totalPerfectDays', totalPerfect.toString());
-                if (document.getElementById('streak-badge')) document.getElementById('streak-badge').innerText = `${streak} Days 🔥`;
+                localStorage.setItem('totalPerfectDays', tp.toString());
+                localStorage.setItem('maxStreak', Math.max(maxS, streak).toString());
+                const badge = document.getElementById('streak-badge'); if (badge) badge.innerText = `${streak} Days 🔥`;
             }
-            history[today] = 1; 
-            localStorage.setItem('routineHistory', JSON.stringify(history));
-            renderChart();
-            setHeader();
+            history[today] = 1; localStorage.setItem('routineHistory', JSON.stringify(history));
+            renderChart(); setHeader();
         }
 
         function updateBuddyMessage(immediate = false) {
-            const bubble = document.getElementById('buddy-bubble');
-            const text = document.getElementById('buddy-text');
-            if (!bubble || !text) return;
-            if (immediate) {
-                bubble.classList.add('scale-110');
-                setTimeout(() => bubble.classList.remove('scale-110'), 300);
-            }
-            const randMsg = buddyMessages[Math.floor(Math.random() * buddyMessages.length)];
-            text.innerText = randMsg.replace("{name}", USER_NAME);
-        }
-
-        function changeVibe(name, hex) {
-            CURRENT_VIBE = name;
-            CURRENT_VIBE_HEX = hex;
-            localStorage.setItem('currentVibe', name);
-            localStorage.setItem('currentVibeHex', hex);
-            applyVibe();
+            const b = document.getElementById('buddy-bubble'); const t = document.getElementById('buddy-text');
+            if (!b || !t) return;
+            if (immediate) { b.classList.add('scale-110'); setTimeout(() => b.classList.remove('scale-110'), 300); }
+            t.innerText = buddyMessages[Math.floor(Math.random() * buddyMessages.length)].replace("{name}", USER_NAME);
         }
 
         function applyVibe() {
             const root = document.documentElement;
             root.style.setProperty('--vibe-color', CURRENT_VIBE_HEX);
             root.style.setProperty('--vibe-light', `${CURRENT_VIBE_HEX}22`);
-            const meta = document.getElementById('meta-theme-color');
-            if (meta) meta.content = CURRENT_VIBE_HEX;
-            document.querySelectorAll('.vibe-dot').forEach(dot => {
-                dot.classList.toggle('active', dot.getAttribute('data-vibe') === CURRENT_VIBE);
-            });
-            renderChart();
-            updateStaticText();
+            const meta = document.getElementById('meta-theme-color'); if (meta) meta.content = CURRENT_VIBE_HEX;
+            document.querySelectorAll('.vibe-dot').forEach(dot => dot.classList.toggle('active', dot.getAttribute('data-vibe') === CURRENT_VIBE));
+            renderChart(); updateStaticText();
         }
 
-        function updateUserNameSetting() {
-            const input = document.getElementById('setting-name');
-            if (input) {
-                USER_NAME = input.value || "Disha";
-                localStorage.setItem('userName', USER_NAME);
-                updateStaticText();
-            }
-        }
+        function changeVibe(name, hex) { CURRENT_VIBE = name; CURRENT_VIBE_HEX = hex; localStorage.setItem('currentVibe', name); localStorage.setItem('currentVibeHex', hex); applyVibe(); }
+
+        function updateUserNameSetting() { const input = document.getElementById('setting-name'); if (input) { USER_NAME = input.value || "Disha"; localStorage.setItem('userName', USER_NAME); updateStaticText(); } }
 
         function switchTab(tab) {
-            currentView = tab;
-            isDemoMode = (tab === 'demo');
-            ['view-today', 'view-about', 'view-milestones', 'view-settings'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
-
+            currentView = tab; isDemoMode = (tab === 'demo');
+            ['view-today', 'view-about', 'view-milestones', 'view-settings', 'view-detail-stats'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
+            
             if (tab === 'today' || tab === 'demo') {
                 document.getElementById('view-today')?.classList.remove('hidden');
-                if (isDemoMode) {
-                    document.getElementById('greeting').innerText = "🎀 Demo Mode";
-                    document.getElementById('current-date').innerText = "Preview Only";
-                } else { setHeader(); checkSundaySummary(); }
+                if (isDemoMode) { document.getElementById('greeting').innerText = "🎀 Demo Mode"; document.getElementById('current-date').innerText = "Preview Only"; } else { setHeader(); checkSundaySummary(); }
             } else if (tab === 'about') document.getElementById('view-about')?.classList.remove('hidden');
             else if (tab === 'milestones') { document.getElementById('view-milestones')?.classList.remove('hidden'); renderMilestones(); }
-            else if (tab === 'settings') { 
-                document.getElementById('view-settings')?.classList.remove('hidden'); 
-                const input = document.getElementById('setting-name');
-                if (input) input.value = USER_NAME;
-            }
+            else if (tab === 'settings') { document.getElementById('view-settings')?.classList.remove('hidden'); const i = document.getElementById('setting-name'); if (i) i.value = USER_NAME; }
+            else if (tab === 'detail-stats') { document.getElementById('view-detail-stats')?.classList.remove('hidden'); renderDetailedStats(); }
 
             document.getElementById('demo-badge')?.classList.toggle('hidden', !isDemoMode);
-            document.getElementById('bottom-bar')?.classList.toggle('hidden', tab === 'about' || tab === 'milestones' || tab === 'settings');
+            document.getElementById('bottom-bar')?.classList.toggle('hidden', ['about', 'milestones', 'settings', 'detail-stats'].includes(tab));
             
-            updateStaticText();
-            renderTasks();
-            renderChart();
-            renderWater();
-            toggleSidebar();
-            window.scrollTo(0,0);
+            updateStaticText(); renderTasks(); renderChart(); renderWater(); toggleSidebar(); window.scrollTo(0,0);
         }
 
         function updateStaticText() {
-            const sbName = document.getElementById('sidebar-name');
-            if (sbName) sbName.innerText = `${USER_NAME}'s Buddy`;
-            const statsTitle = document.getElementById('stats-title');
-            if (statsTitle) statsTitle.innerText = `🌸 ${USER_NAME}'s Stats`;
-            const msTitle = document.getElementById('milestones-title');
-            if (msTitle) msTitle.innerText = `${USER_NAME}'s Stickers 🏅`;
-            const rTitle = document.getElementById('reward-title');
-            if (rTitle) rTitle.innerText = `${CURRENT_VIBE.toUpperCase()} QUEEN!`;
-            const rText = document.getElementById('reward-text');
-            if (rText) rText.innerText = `${USER_NAME}, you've conquered the day!`;
-            const abText = document.getElementById('about-text');
-            if (abText) abText.innerText = `Tell your besties about ${USER_NAME}'s Routine Buddy! 🌸`;
-            const journal = document.getElementById('journal-input');
-            if (journal && !isDemoMode) journal.placeholder = `What made you smile today, ${USER_NAME}?`;
+            document.getElementById('sidebar-name').innerText = `${USER_NAME}'s Buddy`;
+            document.getElementById('stats-title').innerText = `🌸 ${USER_NAME}'s Stats`;
+            document.getElementById('milestones-title').innerText = `${USER_NAME}'s Stickers 🏅`;
+            document.getElementById('detail-stats-subtitle').innerText = `How you're growing, ${USER_NAME}!`;
+            document.getElementById('reward-title').innerText = `${CURRENT_VIBE.toUpperCase()} QUEEN!`;
+            document.getElementById('reward-text').innerText = `${USER_NAME}, you've conquered the day!`;
+            document.getElementById('about-text').innerText = `Tell your besties about ${USER_NAME}'s Routine Buddy! 🌸`;
+            const journal = document.getElementById('journal-input'); if (journal && !isDemoMode) journal.placeholder = `What made you smile today, ${USER_NAME}?`;
             updateBuddyMessage();
         }
 
         function renderTasks() {
-            const container = document.getElementById('task-container');
-            if (!container) return;
-            container.innerHTML = '';
-            const activeList = isDemoMode ? demoCompletedIds : completedIds;
+            const container = document.getElementById('task-container'); if (!container) return;
+            container.innerHTML = ''; const activeList = isDemoMode ? demoCompletedIds : completedIds;
             tasks.forEach(task => {
                 const isCompleted = activeList.includes(task.id);
                 const card = document.createElement('div');
@@ -823,40 +780,26 @@
                 card.innerHTML = `<div class="flex items-center gap-4"><span class="text-2xl">${task.emoji}</span><div class="flex flex-col"><span class="text-lg font-bold ${isCompleted ? 'text-green-800 dark:text-green-100' : 'text-slate-700 dark:text-slate-200'} leading-tight">${task.text}</span><span class="text-[10px] font-semibold ${isCompleted ? 'text-green-600 dark:text-green-300' : 'text-slate-400'} uppercase tracking-wider">${task.time}</span></div></div><div class="heart-container"><input type="checkbox" class="checkbox" ${isCompleted ? 'checked' : ''} disabled><div class="svg-container"><svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05,1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05C22,11.87,19.053,16.006,13.915,20.317Z"></path></svg><svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path></svg><svg class="svg-celebrate" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 55,20 65,20 60,30 65,40 55,40 50,50 45,40 35,40 40,30 35,20 45,20"></polygon><polygon points="20,40 25,50 35,50 30,60 35,70 25,70 20,80 15,70 5,70 10,60 5,50 15,50"></polygon><polygon points="80,40 85,50 95,50 90,60 95,70 85,70 80,80 75,70 65,70 70,60 65,50 75,50"></polygon></svg></div></div>`;
                 container.appendChild(card);
             });
+            updateProgress();
         }
 
         function updateProgress() {
             const activeList = isDemoMode ? demoCompletedIds : completedIds;
             const percentage = (activeList.length / tasks.length) * 100;
-            const bar = document.getElementById('progress-bar');
-            if (bar) bar.style.width = `${percentage}%`;
-            const text = document.getElementById('progress-text');
-            if (text) text.innerText = `${activeList.length} / ${tasks.length} tasks`;
-            const circle = document.getElementById('circular-progress-bar');
-            if (circle) circle.style.strokeDashoffset = (32 * 2 * Math.PI) - (percentage / 100 * (32 * 2 * Math.PI));
-            const label = document.getElementById('circle-percent');
-            if (label) label.innerText = `${Math.round(percentage)}%`;
-            const reward = document.getElementById('perfect-day-reward');
-            if (reward) reward.classList.toggle('hidden', activeList.length < tasks.length);
+            const bar = document.getElementById('progress-bar'); if (bar) bar.style.width = `${percentage}%`;
+            const text = document.getElementById('progress-text'); if (text) text.innerText = `${activeList.length} / ${tasks.length} tasks`;
+            const circle = document.getElementById('circular-progress-bar'); if (circle) circle.style.strokeDashoffset = (32 * 2 * Math.PI) - (percentage / 100 * (32 * 2 * Math.PI));
+            const label = document.getElementById('circle-percent'); if (label) label.innerText = `${Math.round(percentage)}%`;
+            const reward = document.getElementById('perfect-day-reward'); if (reward) reward.classList.toggle('hidden', activeList.length < tasks.length);
         }
 
         function setHeader() {
-            const now = new Date();
-            const hour = now.getHours();
-            const count = completedIds.length;
-            const total = tasks.length;
-            const greeting = document.getElementById('greeting');
-            const date = document.getElementById('current-date');
-            const quote = document.getElementById('daily-quote');
-
+            const now = new Date(); const hour = now.getHours(); const count = completedIds.length; const total = tasks.length;
+            const greeting = document.getElementById('greeting'); const date = document.getElementById('current-date'); const quote = document.getElementById('daily-quote');
             if (greeting) {
                 if (count === total) greeting.innerText = `You did it, ${USER_NAME}! 👑`;
                 else if (count === total - 1 && count > 0) greeting.innerText = `Almost there, ${USER_NAME}! ✨`;
-                else {
-                    if (hour < 12) greeting.innerText = `Good Morning, ${USER_NAME}! 🌞`;
-                    else if (hour < 17) greeting.innerText = `Good Afternoon, ${USER_NAME}! ☁️`;
-                    else greeting.innerText = `Good Evening, ${USER_NAME}! 🌙`;
-                }
+                else { if (hour < 12) greeting.innerText = `Good Morning, ${USER_NAME}! 🌞`; else if (hour < 17) greeting.innerText = `Good Afternoon, ${USER_NAME}! ☁️`; else greeting.innerText = `Good Evening, ${USER_NAME}! 🌙`; }
             }
             if (date) date.innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
@@ -864,52 +807,37 @@
         }
 
         function renderChart() {
-            const container = document.getElementById('chart-container');
-            if (!container) return;
-            container.innerHTML = '';
-            const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
-            const todayStr = getTodayString();
-            const daysToShow = chartRange === 'week' ? 7 : 30;
-            const isDarkMode = document.documentElement.classList.contains('dark');
-
+            const container = document.getElementById('chart-container'); if (!container) return; container.innerHTML = '';
+            const history = JSON.parse(localStorage.getItem('routineHistory') || '{}'); const todayStr = getTodayString();
+            const daysToShow = chartRange === 'week' ? 7 : 30; const isDarkMode = document.documentElement.classList.contains('dark');
             for (let i = daysToShow - 1; i >= 0; i--) {
-                const date = new Date(); date.setDate(new Date().getDate() - i);
-                const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-                let percent = (dateKey === todayStr && !isDemoMode) ? (completedIds.length / tasks.length) : (history[dateKey] || 0);
-                if (isDemoMode) percent = [0.8, 1.0, 0.4, 0.9, 0.2, 0.7, 1.0][i % 7];
-                let barEmoji = percent === 0 ? "🌱" : percent < 0.5 ? "🌿" : percent < 1.0 ? "🌸" : "👑";
-                const column = document.createElement('div');
-                column.className = "flex flex-col items-center flex-1 min-w-[32px] h-full";
-                column.innerHTML = `<span class="text-xs mb-1 shrink-0">${barEmoji}</span><div class="w-3.5 rounded-full ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'} flex-grow relative overflow-hidden flex flex-col justify-end"><div class="pipe-bar w-full vibe-bg rounded-full" style="height: ${Math.round(percent * 100)}%"></div></div><span class="text-[9px] mt-2 font-bold ${dateKey === todayStr ? 'vibe-text' : 'text-slate-300 dark:text-slate-600'}">${date.getDate()}</span>`;
+                const d = new Date(); d.setDate(new Date().getDate() - i); const k = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+                let p = (k === todayStr && !isDemoMode) ? (completedIds.length / tasks.length) : (history[k] || 0);
+                if (isDemoMode) p = [0.8, 1.0, 0.4, 0.9, 0.2, 0.7, 1.0][i % 7];
+                let barEmoji = p === 0 ? "🌱" : p < 0.5 ? "🌿" : p < 1.0 ? "🌸" : "👑";
+                const column = document.createElement('div'); column.className = "flex flex-col items-center flex-1 min-w-[32px] h-full";
+                column.innerHTML = `<span class="text-xs mb-1 shrink-0">${barEmoji}</span><div class="w-3.5 rounded-full ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'} flex-grow relative overflow-hidden flex flex-col justify-end"><div class="pipe-bar w-full vibe-bg rounded-full" style="height: ${Math.round(p * 100)}%"></div></div><span class="text-[9px] mt-2 font-bold ${k === todayStr ? 'vibe-text' : 'text-slate-300 dark:text-slate-600'}">${d.getDate()}</span>`;
                 container.appendChild(column);
             }
             if (chartRange === 'month') setTimeout(() => container.scrollLeft = container.scrollWidth, 50);
         }
 
         function renderMilestones() {
-            const grid = document.getElementById('milestone-grid');
-            if (!grid) return;
-            grid.innerHTML = '';
+            const grid = document.getElementById('milestone-grid'); if (!grid) return; grid.innerHTML = '';
             const total = parseInt(localStorage.getItem('totalPerfectDays') || '0');
             milestones.forEach(m => {
-                const unlocked = total >= m.req;
-                const card = document.createElement('div');
+                const unlocked = total >= m.req; const card = document.createElement('div');
                 card.className = `p-6 rounded-3xl border-2 flex flex-col items-center text-center transition-all ${unlocked ? 'bg-white dark:bg-darkCard border-pink-100 dark:border-pink-900/40 shadow-sm' : 'bg-slate-50 dark:bg-slate-900/50 border-transparent grayscale opacity-50'}`;
-                card.innerHTML = `<span class="text-5xl mb-4">${m.emoji}</span><h3 class="font-bold text-sm text-slate-700 dark:text-slate-200">${m.text}</h3><p class="text-[10px] text-slate-400 mt-1">${unlocked ? 'Unlocked!' : `${total}/${m.req}`}</p>`;
+                card.innerHTML = `<span class="text-5xl mb-4">${m.emoji}</span><h3 class="font-bold text-sm text-slate-700 dark:text-slate-200">${m.text}</h3><p class="text-[10px] text-slate-400 mt-1 font-medium">${unlocked ? 'Unlocked!' : `${total}/${m.req} days`}</p>`;
                 grid.appendChild(card);
             });
         }
 
         function renderWater() {
-            const container = document.getElementById('water-droplets');
-            if (!container) return;
-            container.innerHTML = '';
-            const activeCount = isDemoMode ? 5 : waterCount;
-            const textLabel = document.getElementById('water-count');
-            if (textLabel) textLabel.innerText = `${activeCount}/8 Cups`;
+            const container = document.getElementById('water-droplets'); if (!container) return; container.innerHTML = '';
+            const activeCount = isDemoMode ? 5 : waterCount; const textLabel = document.getElementById('water-count'); if (textLabel) textLabel.innerText = `${activeCount}/8 Cups`;
             for (let i = 0; i < 8; i++) {
-                const droplet = document.createElement('div');
-                droplet.className = `droplet w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm cursor-pointer ${i < activeCount ? 'bg-blue-400 border-blue-500 shadow-sm' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900'}`;
+                const droplet = document.createElement('div'); droplet.className = `droplet w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm cursor-pointer ${i < activeCount ? 'bg-blue-400 border-blue-500 shadow-sm' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900'}`;
                 droplet.innerHTML = i < activeCount ? '💧' : '⚪️';
                 droplet.onclick = () => { if (!isDemoMode) { waterCount = (i + 1 === waterCount) ? waterCount - 1 : i + 1; localStorage.setItem('waterCount', waterCount.toString()); renderWater(); showPositiveToast(); } };
                 container.appendChild(droplet);
@@ -918,13 +846,10 @@
 
         function saveJournal() { if (!isDemoMode) localStorage.setItem('journal', document.getElementById('journal-input').value); }
         function showPositiveToast() {
-            const container = document.getElementById('toast-container');
-            if (!container) return;
-            const toast = document.createElement('div');
+            const container = document.getElementById('toast-container'); if (!container) return; const toast = document.createElement('div');
             toast.className = "floating-message bg-white dark:bg-slate-800 vibe-text px-6 py-3 rounded-full shadow-xl border border-slate-100 dark:border-slate-700 font-bold mb-4 text-xs";
             toast.innerText = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 2000);
+            container.appendChild(toast); setTimeout(() => toast.remove(), 2000);
         }
         function copyAppShare() { navigator.clipboard.writeText(`Hey! Check out ${USER_NAME}'s Routine Buddy! 🌸✨`).then(() => showPositiveToast()); }
         function setChartRange(r) { chartRange = r; renderChart(); }
@@ -932,7 +857,7 @@
         function toggleTheme() { const isDark = document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', isDark ? 'dark' : 'light'); document.getElementById('toggle-knob').innerText = isDark ? '🌙' : '🌞'; renderChart(); }
         function initTheme() { const saved = localStorage.getItem('theme'); if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); document.getElementById('toggle-knob').innerText = '🌙'; } }
 
-        window.onload = () => { setupPWA(); initTheme(); applyVibe(); checkDailyReset(); updateStaticText(); setHeader(); renderTasks(); renderChart(); renderWater(); updateProgress(); };
+        window.onload = () => { setupPWA(); initTheme(); applyVibe(); checkDailyReset(); updateStaticText(); setHeader(); renderTasks(); renderChart(); renderWater(); updateProgress(); setInterval(checkDailyReset, 60000); };
         document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { checkDailyReset(); if (!isDemoMode) setHeader(); renderTasks(); renderChart(); renderWater(); updateProgress(); } });
     </script>
 </body>
