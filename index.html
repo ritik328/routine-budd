@@ -30,7 +30,7 @@
     <style>
         :root {
             --vibe-color: rgb(255, 91, 137);
-            --vibe-light: #fdf2f8;
+            --vibe-light: rgba(255, 91, 137, 0.1);
             --accent-green: #dcfce7;
             --accent-green-dark: #22c55e;
             --text-main: #334155;
@@ -71,7 +71,7 @@
         }
 
         .heart-container .svg-outline {
-            fill: #cbd5e1; /* Grey when unchecked */
+            fill: #cbd5e1;
             position: absolute;
             width: 28px;
             height: 28px;
@@ -176,7 +176,7 @@
         <div class="w-full max-w-sm space-y-6">
             <div class="text-left">
                 <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-2">What's your name?</label>
-                <input id="setup-name" type="text" placeholder="Enter name..." class="w-full mt-1 p-5 bg-slate-50 dark:bg-slate-900 rounded-3xl outline-none font-bold border-2 border-transparent focus:border-pink-200 transition-all">
+                <input id="setup-name" type="text" placeholder="Enter name..." class="w-full mt-1 p-5 bg-slate-50 dark:bg-slate-900 rounded-3xl outline-none font-bold border-2 border-transparent focus:border-pink-200 transition-all text-sm">
             </div>
 
             <div class="text-left">
@@ -202,38 +202,29 @@
         <div class="flex gap-4 mb-12">
             <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
         </div>
-        <div class="grid grid-cols-3 gap-6 max-w-[280px]" id="pin-pad">
-            <!-- Numeric pad injected via JS -->
-        </div>
+        <div class="grid grid-cols-3 gap-6 max-w-[280px]" id="pin-pad"></div>
     </div>
 
     <!-- MAIN APP WRAPPER -->
     <div id="app-content" class="hidden opacity-0 transition-opacity duration-700">
-        <!-- Sidebar Overlay -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden" onclick="toggleSidebar()"></div>
 
-        <!-- Quick Notes Modal -->
         <div id="notes-modal" class="fixed inset-0 flex flex-col justify-end modal-hidden">
             <div class="bg-black/20 backdrop-blur-sm absolute inset-0" onclick="toggleNotes()"></div>
             <div class="bg-white dark:bg-darkCard rounded-t-[40px] p-8 pb-12 relative shadow-2xl max-h-[85vh] flex flex-col">
                 <div class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-6"></div>
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-xl font-bold vibe-text">Quick Notes ✨</h3>
-                    <button onclick="toggleNotes()" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-full">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
+                    <button onclick="toggleNotes()" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 </div>
                 <div class="flex gap-2 mb-6">
                     <input id="note-input" type="text" placeholder="Write something important..." class="flex-grow bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl outline-none font-medium border-2 border-transparent focus:border-slate-200 dark:focus:border-slate-700 transition-all text-sm">
-                    <button onclick="addNote()" class="vibe-bg p-4 rounded-2xl text-white shadow-lg active:scale-90 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    </button>
+                    <button onclick="addNote()" class="vibe-bg p-4 rounded-2xl text-white shadow-lg active:scale-90 transition-transform"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg></button>
                 </div>
                 <div id="notes-list" class="space-y-3 overflow-y-auto flex-grow pb-4"></div>
             </div>
         </div>
 
-        <!-- Sidebar -->
         <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-64 bg-pink-50 dark:bg-slate-800 shadow-2xl p-6 closed border-r dark:border-slate-700">
             <div class="flex items-center gap-2 mb-8 mt-4">
                 <span id="sidebar-avatar" class="text-2xl">🌸</span>
@@ -249,7 +240,6 @@
             </nav>
         </aside>
 
-        <!-- Navigation -->
         <nav class="p-4 flex items-center justify-between sticky top-0 bg-white/70 dark:bg-darkBg/70 backdrop-blur-md z-30 transition-colors">
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="p-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 active:scale-90 transition-transform"><svg class="w-6 h-6 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button>
@@ -257,92 +247,78 @@
             <div class="theme-toggle" onclick="toggleTheme()" id="theme-toggle"><div class="toggle-knob" id="toggle-knob">🌞</div></div>
         </nav>
 
-        <!-- Views Container -->
         <div id="views-container">
-            <!-- Today View -->
             <div id="view-today" class="pb-32">
                 <header class="px-6 pt-4 pb-4">
-                    <!-- Sunday Summary Header -->
                     <div id="sunday-summary" class="hidden mb-6 p-5 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-3xl border border-yellow-100 dark:border-yellow-800 shadow-sm animate-pulse">
                         <div class="flex items-center gap-3">
                             <span class="text-3xl">💐</span>
-                            <div>
-                                <h4 class="text-sm font-bold text-orange-800 dark:text-orange-300">Sunday Bloom!</h4>
-                                <p id="bloom-score-text" class="text-xs text-orange-600 dark:text-orange-400">Loading your week...</p>
-                            </div>
+                            <div><h4 class="text-sm font-bold text-orange-800 dark:text-orange-300">Sunday Bloom!</h4><p id="bloom-score-text" class="text-xs text-orange-600 dark:text-orange-400">Loading...</p></div>
                         </div>
                     </div>
-
                     <div class="flex justify-between items-start">
                         <div class="relative">
                             <h1 id="greeting" class="text-2xl font-bold text-slate-800 dark:text-slate-100 leading-tight">Good Morning!</h1>
                             <p id="current-date" class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">Today is ...</p>
-                            <div id="buddy-bubble" class="mt-3 flex items-center gap-2 p-2 px-3 bg-white dark:bg-slate-800 rounded-2xl rounded-tl-none border border-slate-100 dark:border-slate-700 shadow-sm w-fit transition-all duration-500">
-                                <span class="text-xs font-semibold vibe-text" id="buddy-text">You got this! ✨</span>
-                            </div>
+                            <div id="buddy-bubble" class="mt-3 flex items-center gap-2 p-2 px-3 bg-white dark:bg-slate-800 rounded-2xl rounded-tl-none border border-slate-100 dark:border-slate-700 shadow-sm w-fit transition-all duration-500"><span class="text-xs font-semibold vibe-text" id="buddy-text">You got this! ✨</span></div>
                         </div>
                         <div class="flex flex-col items-end gap-2">
                             <span id="streak-badge" class="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-full text-xs font-bold shadow-sm">0 Days 🔥</span>
                             <button onclick="toggleNotes()" class="relative px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-full text-xs font-bold shadow-sm active:scale-95 transition-all flex items-center gap-1.5">Notes 📝<span id="notes-count-badge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 vibe-bg rounded-full border border-white dark:border-slate-900"></span></button>
                         </div>
                     </div>
-                    <div class="mt-6 flex flex-col gap-2">
+
+                    <div class="mt-8">
+                        <div class="flex justify-between items-center px-1 mb-3">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Your Routine</h3>
+                            <button onclick="toggleHomeManager()" class="text-[10px] font-bold vibe-text hover:underline">Manage ✏️</button>
+                        </div>
+                        <div id="home-routine-manager" class="hidden mb-6 p-5 bg-white dark:bg-darkCard rounded-3xl border-2 vibe-border shadow-lg">
+                            <div class="space-y-3 mb-6">
+                                <input id="home-new-task-name" type="text" oninput="detectEmojiSuggestion(this.value)" placeholder="Task Name" class="w-full p-4 text-sm bg-slate-50 dark:bg-slate-900 rounded-2xl outline-none font-bold border-2 border-transparent focus:border-slate-100 dark:focus:border-slate-800 transition-all">
+                                <div class="flex gap-2">
+                                    <input id="home-new-task-time" type="text" placeholder="Time" class="flex-grow p-4 text-sm bg-slate-50 dark:bg-slate-900 rounded-2xl outline-none font-bold border-2 border-transparent focus:border-slate-100 dark:focus:border-slate-800 transition-all">
+                                    <input id="home-new-task-emoji" type="text" placeholder="✨" class="w-16 p-4 text-center text-sm bg-slate-50 dark:bg-slate-900 rounded-2xl outline-none font-bold border-2 border-transparent focus:border-slate-100 dark:focus:border-slate-800 transition-all">
+                                </div>
+                                <button onclick="addHomeRoutineItem()" class="w-full p-4 vibe-bg text-white font-bold rounded-2xl text-sm active:scale-95 transition-all">Add Task</button>
+                            </div>
+                            <div id="home-manage-list" class="space-y-2 max-h-48 overflow-y-auto"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 flex flex-col gap-2">
                         <div class="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest"><span>Hydration</span><span id="water-count">0/8 Cups</span></div>
                         <div class="flex justify-between gap-1" id="water-droplets"></div>
                     </div>
-                    <div class="mt-6 p-4 bg-white dark:bg-darkCard rounded-2xl border border-pink-100 dark:border-slate-800 shadow-sm transition-colors">
-                        <p id="daily-quote" class="text-sm font-medium vibe-text italic leading-snug">"Small steps lead to big dreams. ✨"</p>
-                    </div>
+                    <div class="mt-6 p-4 bg-white dark:bg-darkCard rounded-2xl border border-pink-100 dark:border-slate-800 shadow-sm transition-colors"><p id="daily-quote" class="text-sm font-medium vibe-text italic leading-snug">"Small steps lead to big dreams. ✨"</p></div>
                 </header>
                 <main class="px-6 space-y-4" id="task-container"></main>
-                <div id="perfect-day-reward" class="hidden px-6 mt-8 text-center animate-bounce">
-                    <div class="bg-yellow-100 dark:bg-yellow-900/20 rounded-3xl p-6 border-2 border-yellow-200 dark:border-yellow-800">
-                        <span class="text-6xl block mb-2">👑</span>
-                        <h2 id="reward-title" class="text-xl font-bold text-yellow-800 dark:text-yellow-400 text-center">Routine Queen!</h2>
-                        <p id="reward-text" class="text-yellow-700 dark:text-yellow-500 text-sm text-center">Conquered the day!</p>
-                    </div>
-                </div>
+                <div id="perfect-day-reward" class="hidden px-6 mt-8 text-center animate-bounce"><div class="bg-yellow-100 dark:bg-yellow-900/20 rounded-3xl p-6 border-2 border-yellow-200 dark:border-yellow-800"><span class="text-6xl block mb-2">👑</span><h2 id="reward-title" class="text-xl font-bold text-yellow-800 dark:text-yellow-400 text-center uppercase">Routine Queen!</h2><p id="reward-text" class="text-yellow-700 dark:text-yellow-500 text-sm text-center">Conquered the day!</p></div></div>
                 <section class="mt-12 px-6 pb-12 border-t border-slate-100 dark:border-slate-800 pt-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 id="stats-title" class="text-xl font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">🌸 Stats</h3>
-                        <div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
-                            <button id="btn-week" onclick="setChartRange('week')" class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-lg transition-all">Week</button>
-                            <button id="btn-month" onclick="setChartRange('month')" class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-lg transition-all">Month</button>
-                        </div>
-                    </div>
-                    <div class="bg-white dark:bg-darkCard p-6 rounded-3xl shadow-sm border border-slate-50 dark:border-slate-800 mb-4 overflow-hidden">
-                        <div id="chart-container" class="flex items-end justify-between h-48 gap-2 overflow-x-auto pb-4 scroll-smooth"></div>
-                    </div>
+                    <div class="flex justify-between items-center mb-6"><h3 id="stats-title" class="text-xl font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">🌸 Stats</h3><div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl"><button id="btn-week" onclick="setChartRange('week')" class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-lg transition-all">Week</button><button id="btn-month" onclick="setChartRange('month')" class="px-3 py-1.5 text-[10px] font-bold uppercase rounded-lg transition-all">Month</button></div></div>
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-3xl shadow-sm border border-slate-50 dark:border-slate-800 mb-4 overflow-hidden"><div id="chart-container" class="flex items-end justify-between h-48 gap-2 overflow-x-auto pb-4 scroll-smooth"></div></div>
                 </section>
             </div>
-
-            <!-- Detail Stats View -->
-            <div id="view-detail-stats" class="hidden px-6 pt-8 pb-40 overflow-y-auto">
-                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Insights 📊</h2>
-                <p id="detail-stats-subtitle" class="text-sm text-slate-500 dark:text-slate-400 mb-8">How you're growing!</p>
-                <div class="grid grid-cols-2 gap-4 mb-8" id="stats-summary-grid"></div>
-                <div class="bg-white dark:bg-darkCard p-6 rounded-[32px] border border-slate-100 dark:border-slate-800 mb-8">
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 text-center">Routine Patterns</h4>
-                    <div id="routine-breakdown-list" class="space-y-4"></div>
-                </div>
-            </div>
-
-            <!-- Milestones View -->
-            <div id="view-milestones" class="hidden px-6 pt-8 pb-32">
-                <h2 id="milestones-title" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Milestones 🏅</h2>
-                <div class="grid grid-cols-2 gap-4 mt-8" id="milestone-grid"></div>
-            </div>
-
-            <!-- Settings View -->
-            <div id="view-settings" class="hidden px-6 pt-8 pb-32">
-                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6">Settings ⚙️</h2>
+            <div id="view-detail-stats" class="hidden px-6 pt-8 pb-40 overflow-y-auto"></div>
+            <div id="view-milestones" class="hidden px-6 pt-8 pb-32"><h2 id="milestones-title" class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Milestones 🏅</h2><div class="grid grid-cols-2 gap-4 mt-8" id="milestone-grid"></div></div>
+            <div id="view-settings" class="hidden px-6 pt-8 pb-40 overflow-y-auto">
+                <h2 class="text-2xl font-bold dark:text-white mb-6">Settings ⚙️</h2>
                 <div class="space-y-8">
+                    <div class="bg-white dark:bg-darkCard p-6 rounded-3xl border border-slate-100 dark:border-slate-800 text-center">
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-4">Manual Streak Fix 🔥</label>
+                        <div class="flex items-center justify-center gap-4">
+                            <button onclick="adjustStreak(-1)" class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full font-bold">-</button>
+                            <span id="manual-streak-val" class="text-2xl font-bold vibe-text">0</span>
+                            <button onclick="adjustStreak(1)" class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full font-bold">+</button>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-2">Adjust if the streak didn't update!</p>
+                    </div>
                     <div class="bg-white dark:bg-darkCard p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-3 ml-2">Display Name</label>
                         <input id="setting-name" type="text" oninput="updateUserNameSetting()" class="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl outline-none font-bold vibe-text">
                     </div>
                     <div class="bg-white dark:bg-darkCard p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-4 ml-2">Pick your Vibe</label>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-4 ml-2">Vibe</label>
                         <div class="flex justify-between" id="vibe-selector">
                             <div onclick="changeVibe('pink', '#f472b6')" class="vibe-dot bg-[#f472b6]" data-vibe="pink"></div>
                             <div onclick="changeVibe('lavender', '#a78bfa')" class="vibe-dot bg-[#a78bfa]" data-vibe="lavender"></div>
@@ -351,37 +327,24 @@
                             <div onclick="changeVibe('peach', '#fb923c')" class="vibe-dot bg-[#fb923c]" data-vibe="peach"></div>
                         </div>
                     </div>
-                    <button onclick="logoutProfile()" class="w-full p-5 bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold rounded-3xl active:scale-95 transition-all mt-4">Change Profile 🔐</button>
+                    <button onclick="logoutProfile()" class="w-full p-5 bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold rounded-3xl active:scale-95 transition-all mt-4">Reset Buddy 🔐</button>
                 </div>
             </div>
-
-            <!-- About View -->
-            <div id="view-about" class="hidden px-6 pt-10">
-                <div class="text-center">
-                    <span class="text-7xl">💖</span>
-                    <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-100 mt-6">Share Buddy</h1>
-                    <p id="about-text" class="text-slate-500 dark:text-slate-400 mt-4 px-4">Routine Buddy keeps you growing every day!</p>
-                    <button onclick="copyAppShare()" class="w-full vibe-bg text-white p-5 rounded-3xl font-bold shadow-lg active:scale-95 transition-all mt-10">🔗 Copy Share Link</button>
-                </div>
+            <div id="view-about" class="hidden px-6 pt-10 text-center">
+                <span class="text-7xl">💖</span><h1 class="text-3xl font-bold dark:text-white mt-6">Share Buddy</h1><p id="about-text" class="text-slate-500 mt-4 px-4">Routine Buddy keeps you growing!</p>
+                <button onclick="copyAppShare()" class="w-full vibe-bg text-white p-5 rounded-3xl font-bold mt-10 shadow-lg active:scale-95 transition-all mx-auto max-w-xs block">🔗 Copy Share Link</button>
             </div>
         </div>
 
-        <!-- Footer -->
         <footer id="bottom-bar" class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 p-5 px-8 flex flex-col items-center shadow-lg z-40 transition-colors">
-            <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden mb-3">
-                <div id="progress-bar" class="h-full vibe-bg transition-all duration-500 w-0"></div>
-            </div>
-            <div class="flex justify-between w-full items-center">
-                <p id="progress-text" class="font-bold text-slate-700 dark:text-slate-300 text-xs">0 / 0 tasks</p>
-                <p id="motivation-msg" class="text-[10px] text-slate-500 italic">Let's go! 🚀</p>
-            </div>
+            <div class="w-full bg-slate-100 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden mb-3"><div id="progress-bar" class="h-full vibe-bg transition-all duration-500 w-0"></div></div>
+            <div class="flex justify-between w-full items-center"><p id="progress-text" class="font-bold text-slate-700 dark:text-slate-300 text-xs">0 / 0 tasks</p><p id="motivation-msg" class="text-[10px] text-slate-500 italic">Let's go! 🚀</p></div>
         </footer>
     </div>
 
     <div id="toast-container" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex flex-col items-center z-[300]"></div>
 
     <script>
-        // --- CONFIG & STATE ---
         let PROFILE = JSON.parse(localStorage.getItem('routine-profile'));
         let USER_NAME = PROFILE?.name || "Disha";
         let USER_AVATAR = PROFILE?.avatar || "🌸";
@@ -397,25 +360,25 @@
         let chartRange = 'week';
         let isDemoMode = false;
 
-        const tasks = [
+        let tasks = JSON.parse(localStorage.getItem('routine-tasks')) || [
             { id: 'wake', text: 'Wake Up', time: '6:30 AM', emoji: '🌞' },
             { id: 'ready', text: 'Get Ready', time: '6:30 – 7:30 AM', emoji: '🪥' },
             { id: 'college', text: 'College + Travel', time: '7:30 – 2:00 PM', emoji: '🎒' },
             { id: 'return', text: 'Return Home', time: '2:00 – 3:20 PM', emoji: '🚶‍♀️' },
-            { id: 'lunch', text: 'Lunch / Rest', time: '3:20 – 4:00 PM', emoji: '🍽️' },
             { id: 'tuition', text: 'Tuition', time: '4:00 – 6:00 PM', emoji: '✏️' },
             { id: 'study1', text: 'Self Study', time: '6:15 – 7:30 PM', emoji: '🧠' },
-            { id: 'relax', text: 'Relax / Timepass', time: '7:30 – 8:00 PM', emoji: '🎧' },
-            { id: 'dinner', text: 'Dinner Prep + Eat', time: '8:00 – 9:00 PM', emoji: '🍳' },
-            { id: 'study2', text: 'Study', time: '10:30 – 11:30 PM', emoji: '📖' },
+            { id: 'dinner', text: 'Dinner', time: '8:00 – 9:00 PM', emoji: '🍳' },
             { id: 'sleep', text: 'Sleep', time: '12:00 AM', emoji: '😴' }
         ];
 
-        const meaningfulQuotes = [
-            `Small steps lead to big dreams, ${USER_NAME}. ✨`, `Be kind to yourself today, ${USER_NAME}. 🌸`, `You are doing your best. 💖`,
-            "Today is a new chance to bloom. 🌿", `Radiate positivity! 🌞`, "Your progress is beautiful. 🦋",
-            `Focus on the good. 🌈`, "Every day is a fresh page. 📖", `${USER_NAME}, you are so strong. 💪`
-        ];
+        const emojiDictionary = {
+            'wake': '🌞', 'ready': '🪥', 'bath': '🚿', 'school': '🎒', 'college': '🎒', 'exam': '📖', 'tuition': '✏️',
+            'study': '📖', 'read': '📚', 'homework': '📝', 'lunch': '🍱', 'dinner': '🍽️', 'eat': '😋',
+            'gym': '💪', 'workout': '💪', 'yoga': '🧘‍♀️', 'sleep': '😴', 'night': '🌌', 'relax': '🎧'
+        };
+
+        const motivationalQuotes = ["Well done! 💪", "You're doing great ✨", "Keep it up! 🦋", "One step closer 🌈", "Fantastic work! 🌟"];
+        const meaningfulQuotes = [`Small steps lead to big dreams, ${USER_NAME}. ✨`, `Be kind to yourself today, ${USER_NAME}. 🌸`, "Your progress is beautiful. 🦋", `${USER_NAME}, you are so strong. 💪` ];
 
         const milestones = [
             { id: 'first', text: 'First Day Done', emoji: '🌱', req: 1 },
@@ -424,7 +387,13 @@
             { id: 'month', text: 'Routine Queen', emoji: '👑', req: 30 }
         ];
 
-        // --- GATE LOGIC ---
+        function getTodayString() {
+            const n = new Date(); const y = n.getFullYear();
+            const m = String(n.getMonth() + 1).padStart(2, '0');
+            const d = String(n.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
         const initGate = () => {
             if (!PROFILE) showSetup();
             else if (USER_PIN) showPinLock();
@@ -432,108 +401,107 @@
         };
 
         const showSetup = () => {
-            const setup = document.getElementById('setup-screen');
-            setup.classList.remove('hidden');
-            const picker = document.getElementById('setup-avatar-picker');
-            picker.innerHTML = '';
-            ["🌸", "👸", "✨", "🦋", "🌷", "🎀", "🍭", "🧸", "🐚", "🌙"].forEach(emoji => {
-                const btn = document.createElement('button');
-                btn.className = "text-2xl p-2 bg-slate-100 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all";
-                btn.innerText = emoji;
-                btn.onclick = () => {
-                    USER_AVATAR = emoji;
-                    picker.querySelectorAll('button').forEach(b => b.classList.remove('ring-2', 'ring-pink-400'));
-                    btn.classList.add('ring-2', 'ring-pink-400');
-                };
-                picker.appendChild(btn);
+            const s = document.getElementById('setup-screen'); s.classList.remove('hidden');
+            const p = document.getElementById('setup-avatar-picker'); p.innerHTML = '';
+            ["🌸", "👸", "✨", "🦋", "🌷", "🎀", "🍭", "🧸", "🐚", "🌙"].forEach(e => {
+                const b = document.createElement('button'); b.className = "text-2xl p-2 bg-slate-100 dark:bg-slate-800 rounded-2xl active:scale-90 transition-all"; b.innerText = e;
+                b.onclick = () => { USER_AVATAR = e; p.querySelectorAll('button').forEach(btn => btn.classList.remove('ring-2', 'ring-pink-400')); b.classList.add('ring-2', 'ring-pink-400'); }; p.appendChild(b);
             });
         };
 
         const completeSetup = () => {
-            const name = document.getElementById('setup-name').value.trim();
-            const pin = document.getElementById('setup-pin').value.trim();
+            const name = document.getElementById('setup-name').value.trim(); const pin = document.getElementById('setup-pin').value.trim();
             if (!name) { showPositiveToast("Enter a name! 💖"); return; }
-            USER_NAME = name; USER_PIN = pin;
-            PROFILE = { name, avatar: USER_AVATAR, pin };
-            localStorage.setItem('routine-profile', JSON.stringify(PROFILE));
-            document.getElementById('setup-screen').classList.add('hidden');
-            showApp();
+            USER_NAME = name; USER_PIN = pin; PROFILE = { name, avatar: USER_AVATAR, pin };
+            localStorage.setItem('routine-profile', JSON.stringify(PROFILE)); document.getElementById('setup-screen').classList.add('hidden'); showApp();
         };
 
         const showPinLock = () => {
-            document.getElementById('pin-screen').classList.remove('hidden');
-            document.getElementById('pin-avatar').innerText = USER_AVATAR;
-            document.getElementById('pin-greeting').innerText = `Welcome back, ${USER_NAME}!`;
+            const ps = document.getElementById('pin-screen'); ps.classList.remove('hidden');
+            document.getElementById('pin-avatar').innerText = USER_AVATAR; document.getElementById('pin-greeting').innerText = `Welcome back, ${USER_NAME}!`;
             const pad = document.getElementById('pin-pad'); pad.innerHTML = '';
             [1,2,3,4,5,6,7,8,9,null,0,'del'].forEach(n => {
                 if (n === null) { pad.appendChild(document.createElement('div')); return; }
-                const b = document.createElement('button');
-                b.className = "w-16 h-16 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 font-bold text-xl active:scale-90 transition-all";
-                if (n === 'del') {
-                    b.innerHTML = '<svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414A2 2 0 0010.828 19H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"></path></svg>';
-                    b.onclick = pinDelete;
-                } else {
-                    b.innerText = n;
-                    b.onclick = () => pinInput(n);
-                }
-                pad.appendChild(b);
+                const b = document.createElement('button'); b.className = "w-16 h-16 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 font-bold text-xl active:scale-90 transition-all";
+                if (n === 'del') { b.innerHTML = '✕'; b.onclick = pinDelete; } else { b.innerText = n; b.onclick = () => pinInput(n); } pad.appendChild(b);
             });
         };
 
         const pinInput = (n) => {
-            if (CURRENT_PIN_INPUT.length >= 4) return;
-            CURRENT_PIN_INPUT += n;
-            updatePinDots();
+            if (CURRENT_PIN_INPUT.length >= 4) return; CURRENT_PIN_INPUT += n; updatePinDots();
             if (CURRENT_PIN_INPUT.length === 4) {
-                if (CURRENT_PIN_INPUT === USER_PIN) {
-                    document.getElementById('pin-screen').classList.add('hidden');
-                    showApp();
-                } else {
-                    CURRENT_PIN_INPUT = "";
-                    setTimeout(updatePinDots, 200);
-                    showPositiveToast("Wrong PIN! ❌");
-                }
+                if (CURRENT_PIN_INPUT === USER_PIN) { document.getElementById('pin-screen').classList.add('hidden'); showApp(); }
+                else { CURRENT_PIN_INPUT = ""; setTimeout(updatePinDots, 200); showPositiveToast("Wrong PIN! ❌"); }
             }
         };
-
         const pinDelete = () => { CURRENT_PIN_INPUT = CURRENT_PIN_INPUT.slice(0, -1); updatePinDots(); };
-        const updatePinDots = () => { document.querySelectorAll('.pin-dot').forEach((d, i) => d.classList.toggle('filled', i < CURRENT_PIN_INPUT.length)); };
+        const updatePinDots = () => document.querySelectorAll('.pin-dot').forEach((d, i) => d.classList.toggle('filled', i < CURRENT_PIN_INPUT.length));
 
-        const showApp = () => {
-            const app = document.getElementById('app-content');
-            app.classList.remove('hidden');
-            setTimeout(() => app.classList.add('opacity-100'), 50);
-            startApp();
-        };
+        const showApp = () => { const app = document.getElementById('app-content'); app.classList.remove('hidden'); setTimeout(() => app.classList.add('opacity-100'), 50); startApp(); };
 
-        // --- APP LOGIC ---
-        function startApp() {
-            initTheme(); applyVibe(); checkDailyReset(); updateStaticText(); setHeader();
-            renderTasks(); renderChart(); renderWater(); updateProgress();
-            setInterval(checkDailyReset, 60000);
-            setupPWA();
+        function toggleHomeManager() { const m = document.getElementById('home-routine-manager'); m.classList.toggle('hidden'); if (!m.classList.contains('hidden')) renderHomeManageList(); }
+        function detectEmojiSuggestion(v) { const lv = v.toLowerCase(); const ei = document.getElementById('home-new-task-emoji'); for (const k in emojiDictionary) { if (lv.includes(k)) { ei.value = emojiDictionary[k]; return; } } if (v.length === 0) ei.value = ''; }
+        function addHomeRoutineItem() {
+            const n = document.getElementById('home-new-task-name').value.trim(); const t = document.getElementById('home-new-task-time').value.trim(); const e = document.getElementById('home-new-task-emoji').value.trim() || "✨";
+            if (!n || !t) return; tasks.push({ id: 'task-' + Date.now(), text: n, time: t, emoji: e });
+            localStorage.setItem('routine-tasks', JSON.stringify(tasks)); document.getElementById('home-new-task-name').value = ''; document.getElementById('home-new-task-time').value = ''; document.getElementById('home-new-task-emoji').value = '';
+            renderTasks(); renderHomeManageList(); updateProgress();
+        }
+        function removeHomeRoutineItem(id) { tasks = tasks.filter(t => t.id !== id); completedIds = completedIds.filter(cid => cid !== id); localStorage.setItem('routine-tasks', JSON.stringify(tasks)); localStorage.setItem('completedTasks', JSON.stringify(completedIds)); renderTasks(); renderHomeManageList(); updateProgress(); }
+        function editHomeTaskName(id, nn) { tasks = tasks.map(t => t.id === id ? {...t, text: nn} : t); localStorage.setItem('routine-tasks', JSON.stringify(tasks)); renderTasks(); }
+        function renderHomeManageList() {
+            const c = document.getElementById('home-manage-list'); if (!c) return; c.innerHTML = '';
+            tasks.forEach(t => {
+                const item = document.createElement('div'); item.className = "flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-800 mb-2";
+                item.innerHTML = `<span class="text-lg shrink-0">${t.emoji}</span><input type="text" value="${t.text}" onchange="editHomeTaskName('${t.id}', this.value)" class="bg-transparent border-none outline-none font-bold text-xs flex-grow dark:text-slate-200"><button onclick="removeHomeRoutineItem('${t.id}')" class="p-1 text-slate-300 hover:text-red-400">✕</button>`;
+                c.appendChild(item);
+            });
         }
 
+        function startApp() { initTheme(); applyVibe(); checkDailyReset(); updateStaticText(); setHeader(); renderTasks(); renderChart(); renderWater(); updateProgress(); setInterval(checkDailyReset, 60000); }
+
         function checkDailyReset() {
-            const today = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
+            const today = getTodayString();
             const lastDate = localStorage.getItem('lastActiveDate');
             const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
+            streak = parseInt(localStorage.getItem('streak') || '0');
+
+            // --- STREAK RECOVERY LOGIC ---
+            // If streak is 0 but history says we completed yesterday, fix it automatically!
+            if (lastDate) {
+                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                const yKey = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
+                if (streak === 0 && history[yKey] === 1) {
+                    streak = 1; localStorage.setItem('streak', "1");
+                }
+            }
 
             if (lastDate && lastDate !== today) {
-                const diff = Math.ceil(Math.abs(new Date(today) - new Date(lastDate)) / (1000 * 60 * 60 * 24));
-                if (diff > 1 || !history[lastDate] || history[lastDate] < 1) streak = 0;
-                
-                let lw = parseInt(localStorage.getItem('totalWaterLifetime') || '0');
-                localStorage.setItem('totalWaterLifetime', (lw + waterCount).toString());
+                const lastDateObj = new Date(lastDate); const todayDateObj = new Date(today);
+                const diffDays = Math.floor((todayDateObj - lastDateObj) / 86400000);
 
+                // RESET: Gap > 1 day OR yesterday incomplete
+                if (diffDays > 1 || !history[lastDate] || history[lastDate] < 1) streak = 0;
+                
+                localStorage.setItem('totalWaterLifetime', (parseInt(localStorage.getItem('totalWaterLifetime') || '0') + waterCount).toString());
                 completedIds = []; waterCount = 0;
                 localStorage.setItem('completedTasks', '[]'); localStorage.setItem('waterCount', '0');
                 localStorage.setItem('journal', "");
             }
+            
             localStorage.setItem('lastActiveDate', today);
             localStorage.setItem('streak', streak.toString());
             const b = document.getElementById('streak-badge'); if (b) b.innerText = `${streak} Days 🔥`;
+            if (document.getElementById('manual-streak-val')) document.getElementById('manual-streak-val').innerText = streak;
             checkSundaySummary(); updateNotesBadge();
+        }
+
+        function adjustStreak(n) {
+            streak = Math.max(0, streak + n);
+            localStorage.setItem('streak', streak.toString());
+            const b = document.getElementById('streak-badge'); if (b) b.innerText = `${streak} Days 🔥`;
+            if (document.getElementById('manual-streak-val')) document.getElementById('manual-streak-val').innerText = streak;
+            showPositiveToast("Streak adjusted! 🔥");
         }
 
         function toggleTask(id) {
@@ -543,18 +511,17 @@
             else { completedIds.push(id); showPositiveToast(); playSparkleSound(); }
             localStorage.setItem('completedTasks', JSON.stringify(completedIds));
             renderTasks(); updateProgress();
-            if (completedIds.length === tasks.length) handlePerfectDay();
+            if (completedIds.length === tasks.length && tasks.length > 0) handlePerfectDay();
         }
 
         function handlePerfectDay() {
-            const today = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
+            const today = getTodayString();
             const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
             if (!history[today]) {
-                streak++; localStorage.setItem('streak', streak.toString());
-                let tp = (parseInt(localStorage.getItem('totalPerfectDays') || '0')) + 1;
-                localStorage.setItem('totalPerfectDays', tp.toString());
-                let maxS = parseInt(localStorage.getItem('maxStreak') || '0');
-                localStorage.setItem('maxStreak', Math.max(maxS, streak).toString());
+                streak = parseInt(localStorage.getItem('streak') || '0') + 1;
+                localStorage.setItem('streak', streak.toString());
+                localStorage.setItem('totalPerfectDays', (parseInt(localStorage.getItem('totalPerfectDays') || '0') + 1).toString());
+                localStorage.setItem('maxStreak', Math.max(parseInt(localStorage.getItem('maxStreak') || '0'), streak).toString());
                 const b = document.getElementById('streak-badge'); if (b) b.innerText = `${streak} Days 🔥`;
                 triggerConfetti();
             }
@@ -564,44 +531,42 @@
 
         function renderTasks() {
             const container = document.getElementById('task-container'); if (!container) return;
-            container.innerHTML = '';
+            container.innerHTML = tasks.length === 0 ? '<div class="text-center py-20 bg-white dark:bg-darkCard rounded-[40px] shadow-sm border border-slate-100 dark:border-slate-800"><p class="text-slate-400 text-sm font-medium">No tasks yet!</p></div>' : '';
+            const activeList = isDemoMode ? demoCompletedIds : completedIds;
             tasks.forEach(t => {
-                const isDone = completedIds.includes(t.id);
+                const isDone = activeList.includes(t.id);
                 const card = document.createElement('div');
                 card.className = `task-card p-5 rounded-3xl border-2 flex items-center justify-between shadow-sm ${isDone ? 'completed-card' : 'bg-white dark:bg-darkCard border-slate-50 dark:border-slate-800'}`;
                 card.onclick = () => toggleTask(t.id);
-                card.innerHTML = `<div class="flex items-center gap-4"><span class="text-2xl">${t.emoji}</span><div><p class="font-bold text-sm ${isDone ? 'vibe-text' : 'text-slate-700 dark:text-slate-200'}">${t.text}</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${t.time}</p></div></div><div class="heart-container"><input type="checkbox" class="checkbox" ${isDone ? 'checked' : ''} disabled><div class="svg-container"><svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05,1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05C22,11.87,19.053,16.006,13.915,20.317Z"></path></svg><svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path></svg><svg class="svg-celebrate" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 55,20 65,20 60,30 65,40 55,40 50,50 45,40 35,40 40,30 35,20 45,20"></polygon></svg></div></div>`;
+                card.innerHTML = `<div class="flex items-center gap-4 text-left"><span class="text-2xl shrink-0">${t.emoji}</span><div><p class="font-bold text-sm ${isDone ? 'vibe-text' : 'text-slate-700 dark:text-slate-200'}">${t.text}</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${t.time}</p></div></div><div class="heart-container"><input type="checkbox" class="checkbox" ${isDone ? 'checked' : ''} disabled><div class="svg-container"><svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05,1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05C22,11.87,19.053,16.006,13.915,20.317Z"></path></svg><svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path></svg><svg class="svg-celebrate" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 55,20 65,20 60,30 65,40 55,40 50,50 45,40 35,40 40,30 35,20 45,20"></polygon></svg></div></div>`;
                 container.appendChild(card);
             });
         }
 
         function updateProgress() {
-            const p = (completedIds.length / tasks.length) * 100;
+            const activeList = isDemoMode ? demoCompletedIds : completedIds; const total = tasks.length || 1; const p = (activeList.length / total) * 100;
             const bar = document.getElementById('progress-bar'); if (bar) bar.style.width = `${p}%`;
-            const text = document.getElementById('progress-text'); if (text) text.innerText = `${completedIds.length} / ${tasks.length} tasks`;
+            const text = document.getElementById('progress-text'); if (text) text.innerText = `${activeList.length} / ${tasks.length} tasks`;
             const label = document.getElementById('circle-percent'); if (label) label.innerText = `${Math.round(p)}%`;
-            const circle = document.getElementById('circular-progress-bar');
-            if (circle) circle.style.strokeDashoffset = (32 * 2 * Math.PI) - (p / 100 * (32 * 2 * Math.PI));
+            const circle = document.getElementById('circular-progress-bar'); if (circle) circle.style.strokeDashoffset = (32 * 2 * Math.PI) - (p / 100 * (32 * 2 * Math.PI));
         }
 
         function setHeader() {
-            document.getElementById('greeting').innerText = `Good Morning, ${USER_NAME}!`;
+            const greetingEl = document.getElementById('greeting'); if (!greetingEl) return;
+            greetingEl.innerText = `Hi, ${USER_NAME}!`;
             document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             const dOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
             document.getElementById('daily-quote').innerText = `"${meaningfulQuotes[dOfYear % meaningfulQuotes.length]}"`;
         }
 
         function renderChart() {
-            const cont = document.getElementById('chart-container'); if (!cont) return;
-            cont.innerHTML = '';
-            const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
-            const todayStr = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`;
+            const cont = document.getElementById('chart-container'); if (!cont) return; cont.innerHTML = '';
+            const history = JSON.parse(localStorage.getItem('routineHistory') || '{}'); const todayStr = getTodayString(); const total = tasks.length || 1;
             for (let i = 6; i >= 0; i--) {
                 const d = new Date(); d.setDate(d.getDate() - i);
-                const k = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-                const val = (k === todayStr) ? (completedIds.length / tasks.length) : (history[k] || 0);
-                const col = document.createElement('div');
-                col.className = "flex flex-col items-center flex-1 h-full";
+                const k = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                const val = (k === todayStr) ? (completedIds.length / total) : (history[k] || 0);
+                const col = document.createElement('div'); col.className = "flex flex-col items-center flex-1 h-full";
                 col.innerHTML = `<span class="text-xs mb-1">${val >= 1 ? '👑' : '🌱'}</span><div class="w-3 rounded-full bg-slate-100 dark:bg-slate-800 flex-grow relative flex flex-col justify-end"><div class="pipe-bar w-full vibe-bg rounded-full" style="height: ${Math.round(val * 100)}%"></div></div><span class="text-[8px] mt-2 font-bold">${d.getDate()}</span>`;
                 cont.appendChild(col);
             }
@@ -609,21 +574,10 @@
 
         function renderDetailedStats() {
             const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
-            const lifetimeWater = parseInt(localStorage.getItem('totalWaterLifetime') || '0') + waterCount;
+            const lw = parseInt(localStorage.getItem('totalWaterLifetime') || '0') + waterCount;
             const maxS = parseInt(localStorage.getItem('maxStreak') || '0');
-            const grid = document.getElementById('stats-summary-grid');
-            grid.innerHTML = `
-                <div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-slate-100 dark:border-slate-800 text-center"><p class="text-2xl font-bold vibe-text">${completedIds.length}</p><p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Today's Tasks</p></div>
-                <div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-slate-100 dark:border-slate-800 text-center"><p class="text-2xl font-bold text-orange-500">${maxS}</p><p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Best Streak</p></div>
-                <div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-slate-100 dark:border-slate-800 text-center"><p class="text-2xl font-bold text-cyan-500">${lifetimeWater}</p><p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Total Water</p></div>
-                <div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-slate-100 dark:border-slate-800 text-center"><p class="text-2xl font-bold text-blue-500">${Object.keys(history).length + 1}</p><p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Days Active</p></div>
-            `;
-            const breakdown = document.getElementById('routine-breakdown-list');
-            breakdown.innerHTML = '';
-            tasks.forEach(t => {
-                const done = completedIds.includes(t.id) ? 100 : 70; // Faking consistency visualization
-                breakdown.innerHTML += `<div class="flex flex-col gap-1"><div class="flex justify-between text-[10px] font-bold text-slate-400"><span>${t.emoji} ${t.text}</span><span>${done}%</span></div><div class="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden"><div class="h-full vibe-bg" style="width: ${done}%"></div></div></div>`;
-            });
+            const views = document.getElementById('view-detail-stats'); if(!views) return;
+            views.innerHTML = `<h2 class="text-2xl font-bold dark:text-white mb-6 px-6 pt-4 text-center">Insights 📊</h2><div class="grid grid-cols-2 gap-4 px-6 mb-8"><div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-slate-100 dark:border-slate-800 text-center"><p class="text-2xl font-bold vibe-text">${completedIds.length}</p><p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Today</p></div><div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-slate-100 dark:border-slate-800 text-center"><p class="text-2xl font-bold text-orange-500">${maxS}</p><p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Best Streak</p></div><div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-slate-100 dark:border-slate-800 text-center"><p class="text-2xl font-bold text-cyan-500">${lw}</p><p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Water Total</p></div><div class="bg-white dark:bg-darkCard p-5 rounded-3xl border border-slate-100 dark:border-slate-800 text-center"><p class="text-2xl font-bold text-blue-500">${Object.keys(history).length + 1}</p><p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Days Active</p></div></div>`;
         }
 
         function renderMilestones() {
@@ -640,7 +594,7 @@
             cont.innerHTML = '';
             for (let i = 0; i < 8; i++) {
                 const d = document.createElement('div');
-                d.className = `droplet w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm cursor-pointer ${i < waterCount ? 'bg-blue-400 border-blue-500' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900'}`;
+                d.className = `droplet w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm cursor-pointer ${i < waterCount ? 'bg-blue-400 border-blue-500 shadow-inner shadow-white/20' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900'}`;
                 d.innerHTML = i < waterCount ? '💧' : '⚪️';
                 d.onclick = () => { if(!isDemoMode) { waterCount = (i + 1 === waterCount) ? i : i + 1; localStorage.setItem('waterCount', waterCount); renderWater(); } };
                 cont.appendChild(d);
@@ -653,48 +607,48 @@
         function toggleNoteState(id) { quickNotes = quickNotes.map(n => n.id === id ? {...n, done: !n.done} : n); localStorage.setItem('quickNotes', JSON.stringify(quickNotes)); renderNotes(); updateNotesBadge(); }
         function deleteNote(id) { quickNotes = quickNotes.filter(n => n.id !== id); localStorage.setItem('quickNotes', JSON.stringify(quickNotes)); renderNotes(); updateNotesBadge(); }
         function renderNotes() {
-            const c = document.getElementById('notes-list'); c.innerHTML = quickNotes.length ? '' : '<p class="text-center text-slate-400 text-sm py-10">No notes yet! ☁️</p>';
+            const c = document.getElementById('notes-list'); c.innerHTML = quickNotes.length ? '' : '<p class="text-center text-slate-400 text-sm py-10 font-medium">No notes yet!</p>';
             quickNotes.forEach(n => {
-                c.innerHTML += `<div class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl ${n.done ? 'opacity-50' : ''}"><button onclick="toggleNoteState(${n.id})" class="shrink-0 w-6 h-6 border-2 ${n.done ? 'vibe-bg' : 'border-slate-300'} rounded-lg flex items-center justify-center">${n.done ? '✓' : ''}</button><span class="text-sm font-bold flex-grow ${n.done ? 'line-through' : ''}">${n.text}</span><button onclick="deleteNote(${n.id})" class="text-slate-300">✕</button></div>`;
+                c.innerHTML += `<div class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl ${n.done ? 'opacity-50' : ''}"><button onclick="toggleNoteState(${n.id})" class="shrink-0 w-6 h-6 border-2 ${n.done ? 'vibe-bg' : 'border-slate-300'} rounded-lg flex items-center justify-center text-[10px] text-white font-bold">${n.done ? '✓' : ''}</button><span class="text-sm font-bold flex-grow ${n.done ? 'line-through text-slate-400' : ''}">${n.text}</span><button onclick="deleteNote(${n.id})" class="text-slate-300 p-1 hover:text-red-400">✕</button></div>`;
             });
         }
-        function updateNotesBadge() { const b = document.getElementById('notes-count-badge'); b.classList.toggle('hidden', !quickNotes.some(n => !n.done)); }
+        function updateNotesBadge() { const b = document.getElementById('notes-count-badge'); if(b) b.classList.toggle('hidden', !quickNotes.some(n => !n.done)); }
 
         function checkSundaySummary() {
             const now = new Date(); if (now.getDay() !== 0) return;
-            document.getElementById('sunday-summary').classList.remove('hidden');
-            document.getElementById('bloom-score-text').innerText = `${USER_NAME}, it's Sunday! Great job on your week! 💐`;
+            document.getElementById('sunday-summary')?.classList.remove('hidden');
+            if(document.getElementById('bloom-score-text')) document.getElementById('bloom-score-text').innerText = `${USER_NAME}, it's Sunday! Great job on your week! 💐`;
         }
 
         function switchTab(t) {
             ['view-today', 'view-detail-stats', 'view-milestones', 'view-settings', 'view-about'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
-            document.getElementById('view-' + t)?.classList.remove('hidden');
+            const v = document.getElementById('view-' + t); if(v) v.classList.remove('hidden');
             if (t === 'detail-stats') renderDetailedStats();
             if (t === 'milestones') renderMilestones();
-            if (t === 'settings') document.getElementById('setting-name').value = USER_NAME;
+            if (t === 'settings') { const sn = document.getElementById('setting-name'); if(sn) sn.value = USER_NAME; }
             document.getElementById('bottom-bar').classList.toggle('hidden', t !== 'today');
-            toggleSidebar();
-            window.scrollTo(0,0);
+            toggleSidebar(); window.scrollTo(0,0);
         }
 
         function changeVibe(n, h) { CURRENT_VIBE = n; CURRENT_VIBE_HEX = h; localStorage.setItem('currentVibe', n); localStorage.setItem('currentVibeHex', h); applyVibe(); }
-        function applyVibe() { document.documentElement.style.setProperty('--vibe-color', CURRENT_VIBE_HEX); document.getElementById('meta-theme-color').content = CURRENT_VIBE_HEX; }
-        function updateUserNameSetting() { USER_NAME = document.getElementById('setting-name').value || "Disha"; localStorage.setItem('userName', USER_NAME); updateStaticText(); setHeader(); }
+        function applyVibe() { document.documentElement.style.setProperty('--vibe-color', CURRENT_VIBE_HEX); document.getElementById('meta-theme-color').content = CURRENT_VIBE_HEX; document.querySelectorAll('.vibe-dot').forEach(dot => dot.classList.toggle('active', dot.getAttribute('data-vibe') === CURRENT_VIBE)); renderTasks(); renderChart(); }
+        function updateUserNameSetting() { const n = document.getElementById('setting-name').value || "Disha"; USER_NAME = n; localStorage.setItem('userName', USER_NAME); updateStaticText(); setHeader(); }
         function updateStaticText() { document.getElementById('sidebar-name').innerText = USER_NAME; document.getElementById('sidebar-avatar').innerText = USER_AVATAR; }
-        function logoutProfile() { localStorage.removeItem('routine-profile'); location.reload(); }
+        function logoutProfile() { if(confirm("This will clear all progress. Continue?")) { localStorage.clear(); location.reload(); } }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('closed'); document.getElementById('sidebar-overlay').classList.toggle('hidden'); }
         function toggleTheme() { const d = document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', d ? 'dark' : 'light'); }
-        function initTheme() { if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark'); }
+        function initTheme() { const t = localStorage.getItem('theme'); if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); }
+
         function showPositiveToast(m) {
             const t = document.createElement('div');
-            t.className = "floating-message bg-white dark:bg-slate-800 vibe-text px-6 py-3 rounded-full shadow-xl font-bold mb-4 text-xs";
-            t.innerText = m || "Great job! ✨";
+            t.className = "floating-message bg-white dark:bg-slate-800 vibe-text px-6 py-3 rounded-full shadow-xl font-bold mb-4 text-xs z-[300]";
+            t.innerText = m || motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
             document.getElementById('toast-container').appendChild(t);
             setTimeout(() => t.remove(), 2000);
         }
-        function playSparkleSound() { /* Built-in Web Audio oscillator */ }
-        function setupPWA() { /* Manifest & SW Logic */ }
-        function triggerConfetti() { /* Confetti Logic */ }
+        function triggerConfetti() { for(let i=0; i<20; i++) { const c = document.createElement('div'); c.className = "fixed w-2 h-2 rounded-full vibe-bg z-[400]"; c.style.left = Math.random()*100+"vw"; c.style.top = "-10px"; c.style.animation = `floatUp ${1+Math.random()*2}s linear reverse forwards`; document.body.appendChild(c); setTimeout(()=>c.remove(), 3000); } }
+        const playSparkleSound = () => { try { const audioCtx = new (window.AudioContext || window.webkitAudioContext)(); const oscillator = audioCtx.createOscillator(); const gainNode = audioCtx.createGain(); oscillator.connect(gainNode); gainNode.connect(audioCtx.destination); oscillator.type = 'sine'; oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); oscillator.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1); gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3); oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.3); } catch (e) { } };
+        function setupPWA() { }
 
         window.onload = initGate;
     </script>
