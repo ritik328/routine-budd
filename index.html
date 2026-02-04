@@ -305,17 +305,17 @@
                 <h2 class="text-2xl font-bold dark:text-white mb-6">Settings ⚙️</h2>
                 <div class="space-y-8">
                     <div class="bg-white dark:bg-darkCard p-6 rounded-3xl border border-slate-100 dark:border-slate-800 text-center">
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-4">Manual Streak Fix 🔥</label>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-4">Manual Streak Adjust 🔥</label>
                         <div class="flex items-center justify-center gap-4">
-                            <button onclick="adjustStreak(-1)" class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full font-bold">-</button>
+                            <button onclick="adjustStreak(-1)" class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full font-bold active:scale-90">-</button>
                             <span id="manual-streak-val" class="text-2xl font-bold vibe-text">0</span>
-                            <button onclick="adjustStreak(1)" class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full font-bold">+</button>
+                            <button onclick="adjustStreak(1)" class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full font-bold active:scale-90">+</button>
                         </div>
-                        <p class="text-[10px] text-slate-400 mt-2">Adjust if the streak didn't update!</p>
+                        <p class="text-[10px] text-slate-400 mt-2">Adjust if calculation feels wrong!</p>
                     </div>
                     <div class="bg-white dark:bg-darkCard p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-3 ml-2">Display Name</label>
-                        <input id="setting-name" type="text" oninput="updateUserNameSetting()" class="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl outline-none font-bold vibe-text">
+                        <input id="setting-name" type="text" oninput="updateUserNameSetting()" class="w-full bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl outline-none font-bold vibe-text text-sm">
                     </div>
                     <div class="bg-white dark:bg-darkCard p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-4 ml-2">Vibe</label>
@@ -345,6 +345,7 @@
     <div id="toast-container" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none flex flex-col items-center z-[300]"></div>
 
     <script>
+        // --- CORE DATA & STATE ---
         let PROFILE = JSON.parse(localStorage.getItem('routine-profile'));
         let USER_NAME = PROFILE?.name || "Disha";
         let USER_AVATAR = PROFILE?.avatar || "🌸";
@@ -360,40 +361,60 @@
         let chartRange = 'week';
         let isDemoMode = false;
 
-        let tasks = JSON.parse(localStorage.getItem('routine-tasks')) || [
+        const defaultTasks = [
             { id: 'wake', text: 'Wake Up', time: '6:30 AM', emoji: '🌞' },
             { id: 'ready', text: 'Get Ready', time: '6:30 – 7:30 AM', emoji: '🪥' },
             { id: 'college', text: 'College + Travel', time: '7:30 – 2:00 PM', emoji: '🎒' },
-            { id: 'return', text: 'Return Home', time: '2:00 – 3:20 PM', emoji: '🚶‍♀️' },
             { id: 'tuition', text: 'Tuition', time: '4:00 – 6:00 PM', emoji: '✏️' },
-            { id: 'study1', text: 'Self Study', time: '6:15 – 7:30 PM', emoji: '🧠' },
             { id: 'dinner', text: 'Dinner', time: '8:00 – 9:00 PM', emoji: '🍳' },
             { id: 'sleep', text: 'Sleep', time: '12:00 AM', emoji: '😴' }
         ];
 
+        let tasks = JSON.parse(localStorage.getItem('routine-tasks')) || defaultTasks;
+
         const emojiDictionary = {
             'wake': '🌞', 'ready': '🪥', 'bath': '🚿', 'school': '🎒', 'college': '🎒', 'exam': '📖', 'tuition': '✏️',
             'study': '📖', 'read': '📚', 'homework': '📝', 'lunch': '🍱', 'dinner': '🍽️', 'eat': '😋',
-            'gym': '💪', 'workout': '💪', 'yoga': '🧘‍♀️', 'sleep': '😴', 'night': '🌌', 'relax': '🎧'
+            'gym': '💪', 'workout': '💪', 'yoga': '🧘‍♀️', 'sleep': '😴', 'relax': '🎧'
         };
 
-        const motivationalQuotes = ["Well done! 💪", "You're doing great ✨", "Keep it up! 🦋", "One step closer 🌈", "Fantastic work! 🌟"];
-        const meaningfulQuotes = [`Small steps lead to big dreams, ${USER_NAME}. ✨`, `Be kind to yourself today, ${USER_NAME}. 🌸`, "Your progress is beautiful. 🦋", `${USER_NAME}, you are so strong. 💪` ];
-
-        const milestones = [
-            { id: 'first', text: 'First Day Done', emoji: '🌱', req: 1 },
-            { id: 'week', text: 'Weekly Bloom', emoji: '🌸', req: 7 },
-            { id: 'biweek', text: 'Stardust Consistency', emoji: '✨', req: 14 },
-            { id: 'month', text: 'Routine Queen', emoji: '👑', req: 30 }
-        ];
-
+        // --- UTILS ---
         function getTodayString() {
-            const n = new Date(); const y = n.getFullYear();
+            const n = new Date();
+            const y = n.getFullYear();
             const m = String(n.getMonth() + 1).padStart(2, '0');
             const d = String(n.getDate()).padStart(2, '0');
             return `${y}-${m}-${d}`;
         }
 
+        // --- STREAK HEALER LOGIC ---
+        function healStreakFromHistory() {
+            const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
+            let count = 0;
+            let checkDate = new Date();
+            
+            const todayStr = getTodayString();
+            const todayIsDone = (history[todayStr] === 1 || (completedIds.length === tasks.length && tasks.length > 0));
+            
+            // If today is NOT done yet, we start counting from yesterday
+            if (!todayIsDone) {
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            // Loop backward through days to find the consecutive chain
+            while (true) {
+                const k = `${checkDate.getFullYear()}-${String(checkDate.getMonth()+1).padStart(2,'0')}-${String(checkDate.getDate()).padStart(2,'0')}`;
+                if (history[k] === 1) {
+                    count++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+            return count;
+        }
+
+        // --- GATE LOGIC ---
         const initGate = () => {
             if (!PROFILE) showSetup();
             else if (USER_PIN) showPinLock();
@@ -458,49 +479,53 @@
             });
         }
 
+        // --- MAIN APP LOGIC ---
         function startApp() { initTheme(); applyVibe(); checkDailyReset(); updateStaticText(); setHeader(); renderTasks(); renderChart(); renderWater(); updateProgress(); setInterval(checkDailyReset, 60000); }
 
         function checkDailyReset() {
             const today = getTodayString();
             const lastDate = localStorage.getItem('lastActiveDate');
             const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
+            
+            // 1. Initial streak sync from storage
             streak = parseInt(localStorage.getItem('streak') || '0');
 
-            // --- STREAK RECOVERY LOGIC ---
-            // If streak is 0 but history says we completed yesterday, fix it automatically!
-            if (lastDate) {
-                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-                const yKey = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
-                if (streak === 0 && history[yKey] === 1) {
-                    streak = 1; localStorage.setItem('streak', "1");
-                }
+            // 2. AUTO-HEAL: Calculate streak from actual history data
+            const calculatedStreak = healStreakFromHistory();
+            if (calculatedStreak > streak) {
+                streak = calculatedStreak;
+                localStorage.setItem('streak', streak.toString());
             }
 
+            // 3. Date Roll-Over Check
             if (lastDate && lastDate !== today) {
                 const lastDateObj = new Date(lastDate); const todayDateObj = new Date(today);
                 const diffDays = Math.floor((todayDateObj - lastDateObj) / 86400000);
 
                 // RESET: Gap > 1 day OR yesterday incomplete
-                if (diffDays > 1 || !history[lastDate] || history[lastDate] < 1) streak = 0;
+                if (diffDays > 1 || !history[lastDate] || history[lastDate] < 1) {
+                    streak = 0;
+                }
                 
                 localStorage.setItem('totalWaterLifetime', (parseInt(localStorage.getItem('totalWaterLifetime') || '0') + waterCount).toString());
                 completedIds = []; waterCount = 0;
                 localStorage.setItem('completedTasks', '[]'); localStorage.setItem('waterCount', '0');
-                localStorage.setItem('journal', "");
             }
             
             localStorage.setItem('lastActiveDate', today);
             localStorage.setItem('streak', streak.toString());
+            updateUIStreak();
+        }
+
+        function updateUIStreak() {
             const b = document.getElementById('streak-badge'); if (b) b.innerText = `${streak} Days 🔥`;
-            if (document.getElementById('manual-streak-val')) document.getElementById('manual-streak-val').innerText = streak;
-            checkSundaySummary(); updateNotesBadge();
+            const m = document.getElementById('manual-streak-val'); if (m) m.innerText = streak;
         }
 
         function adjustStreak(n) {
             streak = Math.max(0, streak + n);
             localStorage.setItem('streak', streak.toString());
-            const b = document.getElementById('streak-badge'); if (b) b.innerText = `${streak} Days 🔥`;
-            if (document.getElementById('manual-streak-val')) document.getElementById('manual-streak-val').innerText = streak;
+            updateUIStreak();
             showPositiveToast("Streak adjusted! 🔥");
         }
 
@@ -518,27 +543,26 @@
             const today = getTodayString();
             const history = JSON.parse(localStorage.getItem('routineHistory') || '{}');
             if (!history[today]) {
-                streak = parseInt(localStorage.getItem('streak') || '0') + 1;
+                streak++;
                 localStorage.setItem('streak', streak.toString());
                 localStorage.setItem('totalPerfectDays', (parseInt(localStorage.getItem('totalPerfectDays') || '0') + 1).toString());
                 localStorage.setItem('maxStreak', Math.max(parseInt(localStorage.getItem('maxStreak') || '0'), streak).toString());
-                const b = document.getElementById('streak-badge'); if (b) b.innerText = `${streak} Days 🔥`;
                 triggerConfetti();
             }
             history[today] = 1; localStorage.setItem('routineHistory', JSON.stringify(history));
-            renderChart(); setHeader();
+            updateUIStreak(); renderChart(); setHeader();
         }
 
         function renderTasks() {
             const container = document.getElementById('task-container'); if (!container) return;
-            container.innerHTML = tasks.length === 0 ? '<div class="text-center py-20 bg-white dark:bg-darkCard rounded-[40px] shadow-sm border border-slate-100 dark:border-slate-800"><p class="text-slate-400 text-sm font-medium">No tasks yet!</p></div>' : '';
+            container.innerHTML = tasks.length === 0 ? '<div class="text-center py-20 bg-white dark:bg-darkCard rounded-[40px] shadow-sm border border-slate-100 dark:border-slate-800"><p class="text-slate-400 text-sm font-medium">No routine tasks yet!</p></div>' : '';
             const activeList = isDemoMode ? demoCompletedIds : completedIds;
             tasks.forEach(t => {
                 const isDone = activeList.includes(t.id);
                 const card = document.createElement('div');
                 card.className = `task-card p-5 rounded-3xl border-2 flex items-center justify-between shadow-sm ${isDone ? 'completed-card' : 'bg-white dark:bg-darkCard border-slate-50 dark:border-slate-800'}`;
                 card.onclick = () => toggleTask(t.id);
-                card.innerHTML = `<div class="flex items-center gap-4 text-left"><span class="text-2xl shrink-0">${t.emoji}</span><div><p class="font-bold text-sm ${isDone ? 'vibe-text' : 'text-slate-700 dark:text-slate-200'}">${t.text}</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">${t.time}</p></div></div><div class="heart-container"><input type="checkbox" class="checkbox" ${isDone ? 'checked' : ''} disabled><div class="svg-container"><svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05,1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05C22,11.87,19.053,16.006,13.915,20.317Z"></path></svg><svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path></svg><svg class="svg-celebrate" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 55,20 65,20 60,30 65,40 55,40 50,50 45,40 35,40 40,30 35,20 45,20"></polygon></svg></div></div>`;
+                card.innerHTML = `<div class="flex items-center gap-4 text-left"><span class="text-2xl shrink-0">${t.emoji}</span><div><p class="font-bold text-sm ${isDone ? 'vibe-text' : 'text-slate-700 dark:text-slate-200'} leading-tight">${t.text}</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${t.time}</p></div></div><div class="heart-container"><input type="checkbox" class="checkbox" ${isDone ? 'checked' : ''} disabled><div class="svg-container"><svg viewBox="0 0 24 24" class="svg-outline" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Zm-3.585,18.4a2.973,2.973,0,0,1-3.83,0C4.947,16.006,2,11.87,2,8.967a4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05,1,1,0,0,0,2,0,4.8,4.8,0,0,1,4.5-5.05,4.8,4.8,0,0,1,4.5,5.05C22,11.87,19.053,16.006,13.915,20.317Z"></path></svg><svg viewBox="0 0 24 24" class="svg-filled" xmlns="http://www.w3.org/2000/svg"><path d="M17.5,1.917a6.4,6.4,0,0,0-5.5,3.3,6.4,6.4,0,0,0-5.5-3.3A6.8,6.8,0,0,0,0,8.967c0,4.547,4.786,9.513,8.8,12.88a4.974,4.974,0,0,0,6.4,0C19.214,18.48,24,13.514,24,8.967A6.8,6.8,0,0,0,17.5,1.917Z"></path></svg><svg class="svg-celebrate" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,10 55,20 65,20 60,30 65,40 55,40 50,50 45,40 35,40 40,30 35,20 45,20"></polygon></svg></div></div>`;
                 container.appendChild(card);
             });
         }
@@ -547,7 +571,6 @@
             const activeList = isDemoMode ? demoCompletedIds : completedIds; const total = tasks.length || 1; const p = (activeList.length / total) * 100;
             const bar = document.getElementById('progress-bar'); if (bar) bar.style.width = `${p}%`;
             const text = document.getElementById('progress-text'); if (text) text.innerText = `${activeList.length} / ${tasks.length} tasks`;
-            const label = document.getElementById('circle-percent'); if (label) label.innerText = `${Math.round(p)}%`;
             const circle = document.getElementById('circular-progress-bar'); if (circle) circle.style.strokeDashoffset = (32 * 2 * Math.PI) - (p / 100 * (32 * 2 * Math.PI));
         }
 
@@ -556,7 +579,8 @@
             greetingEl.innerText = `Hi, ${USER_NAME}!`;
             document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             const dOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-            document.getElementById('daily-quote').innerText = `"${meaningfulQuotes[dOfYear % meaningfulQuotes.length]}"`;
+            const quotes = [`Small steps lead to big dreams, ${USER_NAME}. ✨`, `Be kind to yourself, ${USER_NAME}. 🌸`, "Your progress is beautiful. 🦋", `${USER_NAME}, you are strong. 💪` ];
+            document.getElementById('daily-quote').innerText = `"${quotes[dOfYear % quotes.length]}"`;
         }
 
         function renderChart() {
@@ -590,8 +614,7 @@
         }
 
         function renderWater() {
-            const cont = document.getElementById('water-droplets'); if (!cont) return;
-            cont.innerHTML = '';
+            const cont = document.getElementById('water-droplets'); if (!cont) return; cont.innerHTML = '';
             for (let i = 0; i < 8; i++) {
                 const d = document.createElement('div');
                 d.className = `droplet w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm cursor-pointer ${i < waterCount ? 'bg-blue-400 border-blue-500 shadow-inner shadow-white/20' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900'}`;
@@ -614,11 +637,7 @@
         }
         function updateNotesBadge() { const b = document.getElementById('notes-count-badge'); if(b) b.classList.toggle('hidden', !quickNotes.some(n => !n.done)); }
 
-        function checkSundaySummary() {
-            const now = new Date(); if (now.getDay() !== 0) return;
-            document.getElementById('sunday-summary')?.classList.remove('hidden');
-            if(document.getElementById('bloom-score-text')) document.getElementById('bloom-score-text').innerText = `${USER_NAME}, it's Sunday! Great job on your week! 💐`;
-        }
+        function checkSundaySummary() { const now = new Date(); if (now.getDay() !== 0) return; document.getElementById('sunday-summary')?.classList.remove('hidden'); document.getElementById('bloom-score-text').innerText = `${USER_NAME}, it's Sunday! Great job on your week! 💐`; }
 
         function switchTab(t) {
             ['view-today', 'view-detail-stats', 'view-milestones', 'view-settings', 'view-about'].forEach(id => document.getElementById(id)?.classList.add('hidden'));
@@ -634,15 +653,15 @@
         function applyVibe() { document.documentElement.style.setProperty('--vibe-color', CURRENT_VIBE_HEX); document.getElementById('meta-theme-color').content = CURRENT_VIBE_HEX; document.querySelectorAll('.vibe-dot').forEach(dot => dot.classList.toggle('active', dot.getAttribute('data-vibe') === CURRENT_VIBE)); renderTasks(); renderChart(); }
         function updateUserNameSetting() { const n = document.getElementById('setting-name').value || "Disha"; USER_NAME = n; localStorage.setItem('userName', USER_NAME); updateStaticText(); setHeader(); }
         function updateStaticText() { document.getElementById('sidebar-name').innerText = USER_NAME; document.getElementById('sidebar-avatar').innerText = USER_AVATAR; }
-        function logoutProfile() { if(confirm("This will clear all progress. Continue?")) { localStorage.clear(); location.reload(); } }
+        function logoutProfile() { if(confirm("Clear progress?")) { localStorage.clear(); location.reload(); } }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('closed'); document.getElementById('sidebar-overlay').classList.toggle('hidden'); }
-        function toggleTheme() { const d = document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', d ? 'dark' : 'light'); }
+        function toggleTheme() { const d = document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', d ? 'dark' : 'light'); document.getElementById('toggle-knob').innerText = d ? '🌙' : '🌞'; renderChart(); }
         function initTheme() { const t = localStorage.getItem('theme'); if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) document.documentElement.classList.add('dark'); }
 
         function showPositiveToast(m) {
             const t = document.createElement('div');
             t.className = "floating-message bg-white dark:bg-slate-800 vibe-text px-6 py-3 rounded-full shadow-xl font-bold mb-4 text-xs z-[300]";
-            t.innerText = m || motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+            t.innerText = m || "Great job! ✨";
             document.getElementById('toast-container').appendChild(t);
             setTimeout(() => t.remove(), 2000);
         }
